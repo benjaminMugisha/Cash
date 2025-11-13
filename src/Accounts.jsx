@@ -13,7 +13,7 @@ function Accounts() {
         console.error("Error fetching accounts: ", err);
       }
     };
-    fetchAccounts();
+    fetchAccounts(); 
   }, []);
 
   return (

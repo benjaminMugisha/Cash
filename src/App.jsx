@@ -7,6 +7,12 @@ import Withdraw from './Withdraw'
 import Transfer from './Transfer'
 import UserProfile from './UserProfile'
 import Loans from './Loans'
+import RepayFullLoanForm from './RepayFullLoanForm'
+import LoanApplicationForm from './LoanApplicationForm'
+import DirectDebits from './DirectDebits'
+import DirectDebitCreate from './DirectDebitCreate'
+import TransactionHistory from './TransactionHistory'
+
 
 function App() {
   return (
@@ -19,7 +25,11 @@ function App() {
       <Route path='/transfer' element={<Transfer />} />
       <Route path='/' element={<UserProfile />} />
       <Route path='/loans' element={<Loans />} />
-
+      <Route path='/loan/repay' element={< RepayFullLoanForm /> }/>
+      <Route path='/loan/apply' element={< LoanApplicationForm /> }/>
+      <Route path='/dd' element={< DirectDebits /> }/>
+      <Route path='/dd-create' element={< DirectDebitCreate /> }/>
+      <Route path='/transaction' element={< TransactionHistory /> }/>
     </Routes>
   )
 }
