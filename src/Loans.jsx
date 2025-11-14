@@ -3,65 +3,85 @@ import apiClient from "./apiClient";
 
 function Loans() {
   const [loans, setLoans] = useState([]);
+  const [pageNo, setPageNo] = useState(0);
+  const [pageSize] = useState(10); 
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
 
   useEffect(() => {
-    const fetchLoans = async () => {
-      try {
-        const res = await apiClient.get("auth/me/loans");
-        setLoans(res.data.content); 
-      } catch (err) {
-        console.error("Error fetching accounts: ", err);
-      }
-    };
-    fetchLoans();
-  }, []);
+    fetchLoans(pageNo); 
+  }, [pageNo]);
 
-  if(loans.length === 0) {
-    return <p>No Loans found.</p>
-  }
+  const fetchLoans = async (pageNo) => {
+    setLoading(true); 
+    try {
+      const res = await apiClient.get("auth/me/loans", {
+        params: { pageNo, pageSize },
+     });
+
+      setLoans(res.data.content);
+      setPageNo(res.data.pageNo);
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      setError("failed to fetch loans");
+    } finally {
+      setLoading(false); 
+    }
+  };
+
+  const handlePrev = () => { 
+    if (pageNo > 0) setPageNo(pageNo - 1); 
+  };
+
+  const handleNext = () => {
+    if (pageNo < totalPages - 1) setPageNo(pageNo + 1);
+  };
 
   return (
     <div>
-      <h2>Loans of your account:</h2>
-      <table style={{ borderCollapse: "collapse", width: "100%" }} >
+      <h2>your loans:</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {loading ? (<p>Loading .... </p>)
+      : loans.length === 0 ? ( <p>No loans found</p>) :(
+        <table border="1">
         <thead>
           <tr>
-            <th style={thStyle}>Loan ID</th>
-            <th style={thStyle}>Details</th>
+            <th>€ per month</th> 
+            <th>Status</th>
+            <th>remanining balance</th>
+            <th>next payment date</th> 
           </tr>
         </thead>
+
         <tbody>
-          {loans.map((loan) => (
-            <tr key={loan.loanId}>
-              <td style={tdStyle}>{loan.loanId}</td>
-              <td style={tdStyle}> 
-                Principal: €{loan.principal.toFixed(2)} <br />
-                Remaining Balance: €{loan.remainingBalance.toFixed(2)} <br />
-                Amount to Pay Each Month: €{loan.amountToPayEachMonth.toFixed(2)} <br />
-                Start Date: {loan.startDate} <br />
-                Next Payment Date: {loan.nextPaymentDate} <br />
-                Active: {loan.active ? "Yes" : "No"}
-              </td> 
+          {loans.map((l) => (
+            <tr key={l.loanId}> 
+              <td>{l.amountToPayEachMonth}</td>
+              <td>{l.active ? "Active" : "fully repaid"}</td>
+              <td>{l.remainingBalance}</td>
+              <td>{l.nextPaymentDate}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      )}
+
+    <div style={{ marginTop: 20 }}>
+      <button onClick={handlePrev} disabled={pageNo === 0}>
+        Previous
+      </button>
+      <span style={{ margin: "0 10px" }}>
+        Page {pageNo + 1} of {totalPages}
+      </span>
+      <button onClick={handleNext} disabled={pageNo + 1 === totalPages}>
+        Next
+      </button>
+    </div>
+
     </div>
   );
 }
-const thStyle = {
-    border: "2px solid #ccc",
-    padding: "8px",
-    backgroundColor: "#f0f0f0",
-    textAlign: "left",
-    color: "black"
-  };
-  
-  const tdStyle = {
-    border: "2px solid #ccc",
-    padding: "8px",
-    verticalAlign: "top",
-    textAlign: "left"
-  };
-
 export default Loans;

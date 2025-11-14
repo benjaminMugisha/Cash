@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 function LoansList() {
   const [loans, setLoans] = useState([]);
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize] = useState(5); // you can change this
+  const [pageSize] = useState(5); 
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
