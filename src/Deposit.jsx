@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiClient from "./apiClient"; 
+import { deposit } from "./apiClient"
 
 function Deposit() {
   const [amount, setAmount] = useState("");
@@ -8,12 +8,11 @@ function Deposit() {
   const handleDeposit = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiClient.patch("/accounts/deposit", { amount: parseFloat(amount)});
+      const res = await deposit(parseFloat(amount));
 
       setMessage(res.data.message);
       setAmount("");
     } catch (err) {
-      console.error("Deposit failed: ", err);
       setMessage("❌ Deposit failed");  
     } 
   };
@@ -23,7 +22,7 @@ function Deposit() {
       <h2>Deposit</h2>
       <form onSubmit={handleDeposit}>
         <input
-          type="number"
+          type="number" min="1" step="0.01"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}

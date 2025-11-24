@@ -25,7 +25,6 @@ function Accounts() {
 
     } catch (err) {
       setError("failed to fetch accounts"); 
-      console.error("Error fetching accounts: ", err);
     } finally {
       setLoading(false);
     } 

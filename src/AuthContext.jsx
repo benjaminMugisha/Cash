@@ -1,40 +1,77 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect, useRef, useReducer } from "react";
 
 export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+const initialState = {
+  token: localStorage.getItem("token") || null, 
+  user: null,
+  loading: true
+};
 
-  const [user, setUser] = useState(null);
-  const firstRender = useRef(true); 
+function authReducer(state, action) {
+  switch(action.type){
+    case "LOGIN":
+      return {
+        ...state, token: action.payload 
+    };
+    case "SET_USER":
+         return {
+      ...state, user:action.payload, loading:false
+    };
+    case "LOGOUT":
+      return { 
+        ...state, token:null, user:null
+    }; 
+
+    default:
+      return state;
+  };
+}
+
+export function AuthProvider({ children }) {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+  const firstRender = useRef();
+
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (firstRender.current) {
+    if (firstRender.current) {
         firstRender.current = false;
         return;
       }
-      if (!token) return;
-      try {
+    const fetchUser = async () => {
+      if (!state.token) return;
+
+      try {  
         const res = await fetch("http://localhost:8080/api/v2/auth/me", {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${state.token}`
           }
         });
         if (!res.ok) throw new Error("Failed to fetch user");
         
         const data = await res.json();
-        setUser(data);
-      } catch (err) {
-        console.error("Error fetching user:", err);
+        dispatch({type: "SET_USER", payload: data}); 
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        dispatch({ type: "LOGOUT" });
       }
     };
 
     fetchUser(); 
-  }, [token]);
+  }, [state.token]);
+
+  const login = (token) => {
+    localStorage.setItem("token", token);
+    dispatch({ type: "LOGIN", payload: token });
+  }
+
+  const logout = () => {
+    localStorage.removeItem("token"); 
+    dispatch({ type: "LOGOUT" });
+  }
 
   return (
-    <AuthContext.Provider value={{ token, setToken, user, setUser }}>
+    <AuthContext.Provider value={{ ...state, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,15 +1,16 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { setToken, setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); 
+  const navigate = useNavigate(); 
 
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
-  const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
   const handleChanges = (e) => {
@@ -18,33 +19,25 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
-      const response = await axios.post("http://localhost:8080/api/v2/auth/login", credentials);
+      const response = await axios.post(
+        "http://localhost:8080/api/v2/auth/login", credentials);
+
       const { token } = response.data;
-      console.log(token);
+      login(token);
+      navigate("/");
 
-      // Store token
-      localStorage.setItem("token", token);
-      setToken(token);
-
-      // Optionally fetch user info immediately
-      const userRes = await axios.get("http://localhost:8080/api/v2/auth/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUser(userRes.data);
-
-      setSuccess("✅ Login successful!");
-      setCredentials({ email: "", password: "" });
     } catch (error) {
-      console.error("Login failed:", error);
-      setError("❌ Login failed. Try again.");
+      const errorMessage = error.response?.data.message;
+      setError(errorMessage);
     }
   };
 
   return (
     <div>
       <h1>Login:</h1>
-      {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleLogin}>

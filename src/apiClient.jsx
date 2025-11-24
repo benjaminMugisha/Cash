@@ -9,21 +9,28 @@ export const deposit = (amount) => {
 }
 
 export const withdraw = (amount) => {
-  return apiClient.patch(`/accounts/${id}/withdraw`, { amount });
+  return apiClient.patch(`/accounts/withdraw`, { amount });
 }
 
 export const transfer = ( toIban, amount) => {
   return apiClient.patch("/accounts/transfer", { toIban, amount });
 }
 
-apiClient.interceptors.request.use(
- (config) => {
+export const ddCreate = (toIban, amount) => {
+  return apiClient.post("/dd/create", {
+    toIban, amount
+  })
+}
+
+
+apiClient.interceptors.request.use( (config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
-}, (err) => Promise.reject(err)
+},
+(err) => Promise.reject(err)
   );
 
 export default apiClient;

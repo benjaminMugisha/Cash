@@ -8,6 +8,7 @@ function Loans() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
 
   useEffect(() => {
@@ -39,9 +40,32 @@ function Loans() {
     if (pageNo < totalPages - 1) setPageNo(pageNo + 1);
   };
 
+  const repayFully = async (id) => {
+    try {
+      const response = await apiClient.patch(`/loans/repay-full/${id}`); 
+      setSuccess(`✅✅✅  ${response.data.message}`);
+      setTimeout(() => setSuccess(""), 5000);
+      fetchLoans(pageNo);
+    } catch (err) {
+      setError("errorrr ======");
+    }
+  }
+
+  const repayCustom = async (id) => {
+    try {
+    const res = await apiClient.patch(`/loans/repay/${loanId}`)
+    setSuccess(`✅✅✅  ${response.data.message}`);
+    setTimeout(() => setSuccess(""), 5000);
+    fetchLoans(pageNo); 
+    } catch (err) {
+      setError("errorrrrr========");
+    }
+  } 
+
   return (
     <div>
       <h2>your loans:</h2>
+      <h3>{success}</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {loading ? (<p>Loading .... </p>)
@@ -53,6 +77,8 @@ function Loans() {
             <th>Status</th>
             <th>remanining balance</th>
             <th>next payment date</th> 
+            <th>Repay fully</th>
+            <th>Repay custom amount: </th>
           </tr>
         </thead>
 
@@ -63,6 +89,9 @@ function Loans() {
               <td>{l.active ? "Active" : "fully repaid"}</td>
               <td>{l.remainingBalance}</td>
               <td>{l.nextPaymentDate}</td>
+              <td>{l.active && (
+                <button onClick={() => repayFully(l.loanId)}> REPAY </button>
+              )} </td>
             </tr>
           ))}
         </tbody>

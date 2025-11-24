@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiClient from "./apiClient";
+import { ddCreate } from "./apiClient";
 
 function DirectDebitCreate() {
   const [toIban, setToIban] = useState("");
@@ -16,14 +16,12 @@ function DirectDebitCreate() {
     setSuccessData(null);
 
     try {
-      const res = await apiClient.post("dd/create", {
-        toIban,
-        amount: Number(amount),
-      });
+      const res = ddCreate(toIban, parseFloat(amount));
 
       setSuccessData(res.data);  
       setToIban("");
       setAmount("");
+      setTimeout(() => setSuccessData(""), 5000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -31,12 +29,13 @@ function DirectDebitCreate() {
       );
     } finally {
       setLoading(false);
-    }
+    }  
   };
 
   return (
     <div>
       <h2>Create Direct Debit</h2>
+      <h3>{successData}</h3>
 
       <form onSubmit={handleSubmit}>
         <label>

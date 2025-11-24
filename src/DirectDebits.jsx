@@ -108,19 +108,4 @@ function DirectDebits() {
   );
 }
 
-const thStyle = {
-  border: "2px solid #ccc",
-  padding: "8px",
-  backgroundColor: "#f0f0f0",
-  textAlign: "left",
-  color: "black"
-};
-
-const tdStyle = {
-  border: "2px solid #ccc",
-  padding: "8px",
-  verticalAlign: "top",
-  textAlign: "left"
-};
-
 export default DirectDebits;

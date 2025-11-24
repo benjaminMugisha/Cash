@@ -1,9 +1,8 @@
-import React from 'react';
-import { useState } from "react";
-import apiClient from './apiClient';
+import React, {useState} from 'react';
+import { transfer } from "./apiClient";
 
 function Transfer() {
-  const [transfer, setTransfer] = useState({
+  const [formData, setFormData] = useState({
     toIban: "",
     amount: ""
   });
@@ -12,7 +11,7 @@ function Transfer() {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setTransfer({ ...transfer, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -21,12 +20,13 @@ function Transfer() {
     setError("");
 
     try {
-      const res = await apiClient.patch("/accounts/transfer", {
-        toIban: transfer.toIban,
-        amount: parseFloat(transfer.amount)
-      });
+    const res = await transfer(
+      formData.toIban,
+      parseFloat(formData.amount)
+    ); 
+
     setSuccess("✅ " + res.data.message);
-      setTransfer({ toIban: "", amount: "" });
+    setFormData({ toIban: "", amount: "" });
     } catch (err) {
       setError(err.response?.data?.message || "❌ Transfer failed.");
     }
@@ -44,16 +44,14 @@ function Transfer() {
           type="text"
           name="toIban"
           placeholder="Recipient IBAN"
-          value={transfer.toIban}
+          value={formData.toIban}
           onChange={handleChange}
           required
         /> 
         <input
-          type="number"
-          step="0.01"
-          name="amount"
-          placeholder="Amount (€)"
-          value={transfer.amount}
+          type="number" min="1" step="0.01"
+          name="amount" placeholder="Amount (€)"
+          value={formData.amount}
           onChange={handleChange}
           required
         />

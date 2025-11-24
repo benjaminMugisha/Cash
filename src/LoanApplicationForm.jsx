@@ -19,8 +19,7 @@ function LoanApplicationForm() {
         principal,
         monthsToRepay,
     });
-    console.log(res.data);
-      const { message, loanDto } = res.data;
+    const { message, loanDto } = res.data;
 
       setLoanData({
         message, 

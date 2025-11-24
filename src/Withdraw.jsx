@@ -9,11 +9,8 @@ function Withdraw() {
         e.preventDefault(); 
 
         try {
-          if (amount <= 0) {
-            setMessage("❌ Amount must be greater than 0");
-            return;
-          } 
-          const res = await apiClient.patch("/accounts/withdraw", { amount: parseFloat(amount) });
+          const res = await withdraw(parseFloat(amount));
+          console.log(res.data);
           setMessage(res.data.message);
           setAmount(""); 
         } catch(err){
@@ -27,7 +24,7 @@ function Withdraw() {
         <h2>Withdraw</h2>
         <form onSubmit={handleWithdraw}>
             <label htmlFor='amount'>Amount</label>
-            <input type='number' 
+            <input type='number' min="1" step="0.01"
             value={amount} 
             placeholder='Amount (€)' 
             onChange={(e) => setAmount(e.target.value)}

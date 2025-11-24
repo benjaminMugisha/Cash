@@ -28,7 +28,6 @@ function LoansList() {
         ))}
       </ul>
 
-      {/* Pagination Controls */}
       <div>
         <button
           onClick={() => setPageNo((prev) => Math.max(prev - 1, 0))}
