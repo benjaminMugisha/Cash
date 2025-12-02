@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; 
-import apiClient from "./apiClient"; 
+import { cancelDD, getDirectDebits } from "./apiClient"; 
 
 function DirectDebits() {
   const [debits, setDebits] = useState([]);
@@ -18,9 +18,7 @@ function DirectDebits() {
     setLoading(true);
     setError("");
     try {
-      const res = await apiClient.get("auth/me/direct-debits", {
-        params: { pageNo, pageSize },
-      });
+      const res = await getDirectDebits(pageNo, pageSize);
 
       setDebits(res.data.content);
       setPageNo(res.data.pageNo);
@@ -41,10 +39,10 @@ function DirectDebits() {
   };
   
 
-  const cancelDebit = async (id, toAccountUsername, amount) => {
+  const cancelDebit = async (loanId, toAccountUsername, amount) => {
     try {
-      await apiClient.patch(`dd/cancel/${id}`); 
-      setMessage(`✅ direct debit of ${amount}€ per month to ${toAccountUsername} cancelled`);  
+      await cancelDD(loanId);
+      setMessage(`✅ your direct debit of ${amount}€ per month to "${toAccountUsername}" cancelled`);  
       setTimeout(() => setMessage(""), 5000);
 
       fetchDebits(pageNo); 

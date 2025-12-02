@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiClient from "./apiClient";
+import { getTransactions } from "./apiClient";
 
 function TransactionHistory() {
   const [transactions, setTransactions] = useState([]);
@@ -16,14 +16,15 @@ function TransactionHistory() {
   const fetchTransactions = async (pageNo) => {
     setLoading(true);
     try {
-      const res = await apiClient.get("/transactions", {
-    params: {pageNo, pageSize}});
+      const res = await getTransactions(pageNo, pageSize);
       setTransactions(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
-    } catch (err) {
+    } 
+    catch (err) {
       setError(err.response?.data?.message || "Failed to load transactions");
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };

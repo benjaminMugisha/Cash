@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from "react"; 
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ function Login() {
         "http://localhost:8080/api/v2/auth/login", credentials);
 
       const { token } = response.data;
-      login(token);
+      login(token); 
       navigate("/");
 
     } catch (error) {

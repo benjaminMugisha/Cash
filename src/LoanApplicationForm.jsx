@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiClient from "./apiClient";
+import { applyForLoan } from "./apiClient";
 
 function LoanApplicationForm() {
   const [income, setIncome] = useState("");
@@ -14,12 +14,8 @@ function LoanApplicationForm() {
     setLoanData("");
 
     try {
-      const res = await apiClient.post("/loans/apply", {
-        income,
-        principal,
-        monthsToRepay,
-    });
-    const { message, loanDto } = res.data;
+      const res = await applyForLoan(income, principal, monthsToRepay);
+      const { message, loanDto } = res.data;
 
       setLoanData({
         message, 

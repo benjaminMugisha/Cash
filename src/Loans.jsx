@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"; 
-import apiClient from "./apiClient"; 
+import { getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
 
 function Loans() {
   const [loans, setLoans] = useState([]);
@@ -9,19 +9,16 @@ function Loans() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const [customAmount, setCustomAmount] = useState({});
 
   useEffect(() => {
     fetchLoans(pageNo); 
   }, [pageNo]);
 
-  const fetchLoans = async (pageNo) => {
+  const fetchLoans = async (pageNo, pageSize) => {
     setLoading(true); 
     try {
-      const res = await apiClient.get("auth/me/loans", {
-        params: { pageNo, pageSize },
-     });
-
+      const res = await getLoans(pageNo, pageSize)
       setLoans(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
@@ -40,9 +37,9 @@ function Loans() {
     if (pageNo < totalPages - 1) setPageNo(pageNo + 1);
   };
 
-  const repayFully = async (id) => {
+  const repayFully = async (loanId) => {
     try {
-      const response = await apiClient.patch(`/loans/repay-full/${id}`); 
+      const response = await repayFullLoan(loanId);
       setSuccess(`✅✅✅  ${response.data.message}`);
       setTimeout(() => setSuccess(""), 5000);
       fetchLoans(pageNo);
@@ -51,16 +48,31 @@ function Loans() {
     }
   }
 
-  const repayCustom = async (id) => {
+  const repayCustomAmount = async (loanId) => { 
+    const amount = customAmount[loanId]; 
+
+    if (!amount || amount <= 0) {
+      setError("Please enter a valid amount");
+      return; 
+    }
+
     try {
-    const res = await apiClient.patch(`/loans/repay/${loanId}`)
+    const response = await repayCustom(loanId, amount); 
     setSuccess(`✅✅✅  ${response.data.message}`);
-    setTimeout(() => setSuccess(""), 5000);
+    console.log(`${response.data.message}`);
+    setTimeout(() => setSuccess(""), 10000);
     fetchLoans(pageNo); 
+
     } catch (err) {
       setError("errorrrrr========");
     }
   } 
+
+  const handleAmountChange = (loanId, value) => {
+    setCustomAmount(prev => ({
+      ...prev, [loanId]: value
+    }))
+  }
 
   return (
     <div>
@@ -90,8 +102,22 @@ function Loans() {
               <td>{l.remainingBalance}</td>
               <td>{l.nextPaymentDate}</td>
               <td>{l.active && (
-                <button onClick={() => repayFully(l.loanId)}> REPAY </button>
-              )} </td>
+                <button onClick={() => repayFully(l.loanId)}> REPAY FULLY </button>
+              )} 
+              
+              </td>
+              <td>
+              {l.active && (
+                <>
+                <input type="number" min="1" placeholder="amount"
+                value={customAmount[l.loanId] || ""} 
+                onChange={(e) => handleAmountChange(l.loanId, e.target.value)}
+                />
+                <button onClick={() => repayCustomAmount(l.loanId)}>REPAY CUSTOM </button>
+                </>
+              )}
+              </td>
+
             </tr>
           ))}
         </tbody>

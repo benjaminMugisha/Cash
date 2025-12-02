@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiClient from "./apiClient";
+import { getAccounts } from "./apiClient"; 
 
 function Accounts() {
   const [accounts, setAccounts] = useState([]);
@@ -14,9 +14,7 @@ function Accounts() {
     setLoading(true);
     setError("");
     try {
-      const res = await apiClient.get("/accounts/all", {
-        params: {pageNo: page, pageSize}
-      });
+      const res = await getAccounts(pageNo, pageSize);
 
       setAccounts(res.data.content);
       setPageNo(res.data.pageNo);
@@ -83,13 +81,8 @@ function Accounts() {
         </button>
       </div> 
 
-
-
     </div>
   );
 }
 
-
-
 export default Accounts;
-

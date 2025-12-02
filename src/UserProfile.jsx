@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
-import apiClient from "./apiClient";
+import { userInfo } from "./apiClient"; 
 
 function UserProfile() {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const loadUser = async () => {
       try {
-        const res = await apiClient.get("/auth/me");
-        setUser(res.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "❌ Failed to load user info");
-      }
-    };
-    fetchUser();
+      const res = await userInfo(); 
+      setUser(res.data);
+    }
+    finally {
+      setLoading(false); 
+    } 
+  }
+    loadUser();
   }, []);
 
-  if (error) return <p>{error}</p>;
-  if (!user) return <p>Loading...</p>;
+  if(loading) return <p>Loading....</p>
+  if (!user) return <p>No user found ....</p>
+  
 
   return (
     <div>
-      <h2>User Profile</h2>
+      <h2>Your Profile:</h2>
       <p><strong>Username:</strong> {user.accountUsername}</p>
       <p><strong>Balance:</strong> €{user.accountBalance}</p>
       <p><strong>First Name:</strong> {user.firstname}</p>

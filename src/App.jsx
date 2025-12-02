@@ -7,29 +7,37 @@ import Withdraw from './Withdraw'
 import Transfer from './Transfer'
 import UserProfile from './UserProfile'
 import Loans from './Loans'
-import RepayFullLoanForm from './RepayFullLoanForm'
 import LoanApplicationForm from './LoanApplicationForm'
 import DirectDebits from './DirectDebits'
 import DirectDebitCreate from './DirectDebitCreate'
 import TransactionHistory from './TransactionHistory'
+import ProtectedRoute from './ProtectedRoute'
 
 
 function App() {
   return (
     <Routes>
-      <Route path='/register' element={<Register />} />
-      <Route path='/accounts' element={<Accounts />} />
+      <Route path='/register' element={ <Register />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/withdraw' element={<Withdraw />} />
-      <Route path='/deposit' element={<Deposit />} />
-      <Route path='/transfer' element={<Transfer />} />
-      <Route path='/' element={<UserProfile />} />
-      <Route path='/loans' element={<Loans />} />
-      <Route path='/loan/repay' element={< RepayFullLoanForm /> }/>
-      <Route path='/loan/apply' element={< LoanApplicationForm /> }/>
-      <Route path='/dd' element={< DirectDebits /> }/>
-      <Route path='/dd-create' element={< DirectDebitCreate /> }/>
-      <Route path='/transaction' element={< TransactionHistory /> }/>
+
+      <Route element={<ProtectedRoute />}> 
+        <Route path='/' element={ <UserProfile /> } />
+        <Route path='/transaction' element={ < TransactionHistory /> }/>
+
+        <Route path='/accounts' element={ <Accounts /> } />
+        <Route path='/withdraw' element={ <Withdraw /> } />
+        <Route path='/deposit' element={ <Deposit /> } />
+        <Route path='/transfer' element={ <Transfer /> } />
+
+        <Route path='/loans' element={  <Loans /> } />
+        <Route path='/loan-apply' element={  < LoanApplicationForm /> } />
+
+        <Route path='/dd' element={ < DirectDebits /> }/>
+        <Route path='/dd-create' element={ < DirectDebitCreate /> }/>
+      </Route>
+
+      <Route path="*" element={<h1>404. Page Not Found</h1>} />
+
     </Routes>
   )
 }

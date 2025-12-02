@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, useRef, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
+import { userInfo } from "./apiClient";
 
 export const AuthContext = createContext();
 
@@ -20,7 +21,7 @@ function authReducer(state, action) {
     };
     case "LOGOUT":
       return { 
-        ...state, token:null, user:null
+        ...initialState 
     }; 
 
     default:
@@ -30,29 +31,20 @@ function authReducer(state, action) {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const firstRender = useRef();
-
 
   useEffect(() => {
-    if (firstRender.current) {
-        firstRender.current = false;
-        return;
-      }
     const fetchUser = async () => {
-      if (!state.token) return;
+      if (!state.token) {
+        dispatch({ type: "SET_USER", payload: null}); 
+        return;
+      }  
 
       try {  
-        const res = await fetch("http://localhost:8080/api/v2/auth/me", {
-          headers: {
-            Authorization: `Bearer ${state.token}`
-          }
-        });
-        if (!res.ok) throw new Error("Failed to fetch user");
-        
-        const data = await res.json();
-        dispatch({type: "SET_USER", payload: data}); 
-      } catch (error) {
-        console.error("Error fetching user:", error);
+        const res = await userInfo();
+
+        dispatch({type: "SET_USER", payload: res.data}); 
+      } catch(error) {
+        console.log("Error from fetching user: ", error);
         dispatch({ type: "LOGOUT" });
       }
     };
@@ -60,13 +52,13 @@ export function AuthProvider({ children }) {
     fetchUser(); 
   }, [state.token]);
 
-  const login = (token) => {
+  const login = (token) => {   
     localStorage.setItem("token", token);
     dispatch({ type: "LOGIN", payload: token });
   }
 
-  const logout = () => {
-    localStorage.removeItem("token"); 
+  const logout = () => { 
+    localStorage.removeItem("token");  
     dispatch({ type: "LOGOUT" });
   }
 

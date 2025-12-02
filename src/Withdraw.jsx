@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import apiClient, { withdraw } from './apiClient'; 
+import { withdraw } from './apiClient'; 
 
 function Withdraw() { 
     const [amount, setAmount] = useState("");
