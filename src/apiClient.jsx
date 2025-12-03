@@ -13,7 +13,25 @@ apiClient.interceptors.request.use( (config) => {
   return config;
 },
 (err) => Promise.reject(err)
-  );
+);
+
+//response interceptor to detect expired tokens: 
+apiClient.interceptors.response.use(
+  (response) => response ,
+  (error) => {
+    if (
+      error.response && error.response.status === 401 &&
+      error.response.data.message === "JWT token has expired. Please log in again."
+    ) {
+
+      //clear token and redirect the user to login.
+      localStorage.removeItem("token");
+      window.location.href = "/login"
+    }
+
+    return Promise.reject(error); 
+  }
+)
 
 
 export const deposit = (amount) => {

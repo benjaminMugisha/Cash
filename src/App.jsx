@@ -12,6 +12,7 @@ import DirectDebits from './DirectDebits'
 import DirectDebitCreate from './DirectDebitCreate'
 import TransactionHistory from './TransactionHistory'
 import ProtectedRoute from './ProtectedRoute'
+import Dashboard from './Dashboard'
 
 
 function App() {
@@ -21,8 +22,10 @@ function App() {
       <Route path='/login' element={<Login />} />
 
       <Route element={<ProtectedRoute />}> 
+
+        <Route path="/d" element={<Dashboard />}/>
         <Route path='/' element={ <UserProfile /> } />
-        <Route path='/transaction' element={ < TransactionHistory /> }/>
+        <Route path='/transactions' element={ < TransactionHistory /> }/>
 
         <Route path='/accounts' element={ <Accounts /> } />
         <Route path='/withdraw' element={ <Withdraw /> } />

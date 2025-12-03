@@ -18,15 +18,16 @@ function DirectDebitCreate() {
       const res = await ddCreate(toIban, parseFloat(amount));
       console.log(res.data);       
 
-      if(res.data.dto.status === "UPDATED") 
-        setSuccess(`your direct debit to ${res.data.dto.status}  was updated to ${res.data.dto.amount}`);
+      if(res.data.status === "UPDATED") 
+        setSuccess(`your direct debit to ${res.data.dto.toAccountUsername}  was updated to ${res.data.dto.amount}`);
 
-      if(res.data.dto.status === "CREATED_AND_PAID") 
+      if(res.data.status === "CREATED_AND_PAID") 
         setSuccess(`direct debit creation to ${res.data.dto.status} of €${res.data.dto.amount}`);
       setSuccessData(res.data.dto);
 
       setToIban("");
       setAmount("");
+      setError("")
 
       setTimeout(() => setSuccessData(null), 5000);
     } catch (err) {
@@ -36,13 +37,14 @@ function DirectDebitCreate() {
       );
     } finally {
       setLoading(false);
+      setError("");
     }  
   };
 
   return (
     <div>
       <h2>Create Direct Debit</h2>
-      {success && <h2> ✅✅✅✅✅✅✅{success}</h2>}
+      {success && <h2> ✅✅{success}</h2>}
 
       <form onSubmit={handleSubmit}>
         <label>
@@ -77,7 +79,7 @@ function DirectDebitCreate() {
 
       {successData && (
         <div>
-          <h3>Direct Debit Created</h3>
+          <h3>Direct Debit Information: </h3>
           <p><strong>Amount:</strong> €{successData.amount}</p>
           <p><strong>Next Payment Date:</strong> {successData.nextPaymentDate}</p>
           <p><strong>Status:</strong> {successData.active ? "Active" : "Inactive"}</p>

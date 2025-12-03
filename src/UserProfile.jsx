@@ -31,6 +31,7 @@ function UserProfile() {
       <p><strong>Last Name:</strong> {user.lastname}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>IBAN:</strong> {user.iban}</p>
+      
     </div>
   );
 }
