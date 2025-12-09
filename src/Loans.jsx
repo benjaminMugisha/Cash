@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"; 
-import { getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
+import { getLoanInfo, getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
 
 function Loans() {
   const [loans, setLoans] = useState([]);
@@ -102,7 +102,7 @@ function Loans() {
               <td>{l.remainingBalance}</td>
               <td>{l.nextPaymentDate}</td>
               <td>{l.active && (
-                <button onClick={() => repayFully(l.loanId)}> REPAY FULLY </button>
+                <button onClick={() => repayFully(l.loanId)}> CLICK TO REPAY FULLY </button>
               )} 
               
               </td>

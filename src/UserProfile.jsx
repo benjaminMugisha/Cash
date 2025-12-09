@@ -19,7 +19,7 @@ function UserProfile() {
   }, []);
 
   if(loading) return <p>Loading....</p>
-  if (!user) return <p>No user found ....</p>
+  if (!user) return <h3>No user found ....</h3>
   
 
   return (

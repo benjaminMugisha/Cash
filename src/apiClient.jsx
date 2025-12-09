@@ -1,10 +1,12 @@
-import axios from "axios"; 
+import axios from "axios";
+import { sendSessionExpiredMessage } from "./authMessageHelper";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v2", 
 });
 export default apiClient;
 
+//request interceptor to add the token in the header. 
 apiClient.interceptors.request.use( (config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -26,7 +28,9 @@ apiClient.interceptors.response.use(
 
       //clear token and redirect the user to login.
       localStorage.removeItem("token");
-      window.location.href = "/login"
+      // sendSessionExpiredMessage("your session has expired. Please login again");
+      localStorage.setItem("sessionMessage", "Your session has expired. Please login again");
+      window.location.href = "/login" //redirecting.
     }
 
     return Promise.reject(error); 
@@ -95,4 +99,9 @@ export const getTransactions = (pageNo, pageSize) => {
 
 export const userInfo = () => {
   return apiClient.get("/auth/me");
+}
+
+
+export const getLoanInfo = (loanId) => {
+  return apiClient.get(`/loans/${loanId}`);
 }

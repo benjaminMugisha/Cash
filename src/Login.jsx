@@ -1,5 +1,5 @@
-import { useState, useContext } from "react"; 
-import axios from "axios";
+import { useState, useContext, useEffect } from "react"; 
+import axios from "axios"; 
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,17 @@ function Login() {
     email: "",
     password: "",
   });
+  const { sessionMessage, setSessionMessage } = useContext(AuthContext);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const msg = localStorage.getItem("sessionMessage");
+
+    if (msg) {
+      setSessionMessage(msg); 
+      localStorage.removeItem("sessionMessage");
+    }
+  }, []);
 
   const handleChanges = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -39,6 +49,9 @@ function Login() {
     <div>
       <h1>Login:</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
+      {sessionMessage &&<p style={{ color: "red", fontWeight: "bold"}}>
+        {sessionMessage}
+      </p> }
 
       <form onSubmit={handleLogin}>
         <label htmlFor="email">Email</label>

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { userInfo } from "./apiClient";
 
 export const AuthContext = createContext();
@@ -6,7 +6,8 @@ export const AuthContext = createContext();
 const initialState = {
   token: localStorage.getItem("token") || null, 
   user: null,
-  loading: true
+  loading: true, 
+  sessionMessage: ""
 };
 
 function authReducer(state, action) {
@@ -23,6 +24,10 @@ function authReducer(state, action) {
       return { 
         ...initialState 
     }; 
+    case "SET_SESSION_MESSAGE" :
+      return {
+        ...state, sessionMessage: action.payload
+      }
 
     default:
       return state;
@@ -62,8 +67,12 @@ export function AuthProvider({ children }) {
     dispatch({ type: "LOGOUT" });
   }
 
+  const setSessionMessage = (msg) => {
+    dispatch({ type: "SET_SESSION_MESSAGE", payload: msg});
+  }
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout, setSessionMessage }}>
       {children}
     </AuthContext.Provider>
   );

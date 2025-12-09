@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { getDirectDebits, getLoans, getTransactions, userInfo } from './apiClient';
 import { AuthContext } from './AuthContext';
-import {Link} from "react-router-dom"
+import {Link} from "react-router-dom";
 
 function Dashboard() {
     const {token} = useContext(AuthContext);
-    const [ user, setUser] = useState(null);
+    const [ user, setUser] = useState(null); //stateful user because we want the most recent data. 
+    // not from the context since context updates only when the token changes. 
     const [loansCount, setLoansCount] = useState(0); 
     const [ddCount, setddCount] = useState(0); 
-    const [recentT, setRecentT] = useState([]);
+    const [recentT, setRecentT] = useState([]); //recent transactions.
     const [loading, setloading] = useState(true); 
     const [ error, setError] = useState("");
 
@@ -18,8 +19,7 @@ function Dashboard() {
         async function fetchData() {
             try {
                 const [userRes, loanRes, ddRes, txRes] = await Promise.all([
-                    userInfo(), getLoans(), getDirectDebits(), getTransactions(0, 3)
-
+                    userInfo(), getLoans(), getDirectDebits(), getTransactions(0, 3) 
                 ])
                 setloading(true) 
 
@@ -78,7 +78,7 @@ function Dashboard() {
                 <ul>
                     {recentT.map((tx) => (
                         <li key={tx.transactionId}>
-                            {tx.type} - €{tx.amount} - Date:
+                            {tx.type} - €{tx.amount} - Date: &nbsp;
                             { new Date(Date.parse(tx.timestamp)).toLocaleString()}
                         </li>
                     ))}
@@ -92,4 +92,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Dashboard; 

@@ -13,17 +13,22 @@ import DirectDebitCreate from './DirectDebitCreate'
 import TransactionHistory from './TransactionHistory'
 import ProtectedRoute from './ProtectedRoute'
 import Dashboard from './Dashboard'
+import NavBar from './NavBar'
 
 
 function App() {
+
   return (
+   <>
+   <NavBar />
     <Routes>
       <Route path='/register' element={ <Register />} />
       <Route path='/login' element={<Login />} />
+      
 
       <Route element={<ProtectedRoute />}> 
 
-        <Route path="/d" element={<Dashboard />}/>
+        <Route path="/dashboard" element={<Dashboard />}/>
         <Route path='/' element={ <UserProfile /> } />
         <Route path='/transactions' element={ < TransactionHistory /> }/>
 
@@ -42,6 +47,7 @@ function App() {
       <Route path="*" element={<h1>404. Page Not Found</h1>} />
 
     </Routes>
+    </>
   )
 }
 
