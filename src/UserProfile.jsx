@@ -1,26 +1,10 @@
-import { useEffect, useState } from "react";
-import { userInfo } from "./apiClient"; 
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
 
 function UserProfile() {
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
+  const {user} = useContext(AuthContext);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-      const res = await userInfo(); 
-      setUser(res.data);
-    }
-    finally {
-      setLoading(false); 
-    } 
-  }
-    loadUser();
-  }, []);
-
-  if(loading) return <p>Loading....</p>
   if (!user) return <h3>No user found ....</h3>
-  
 
   return (
     <div>

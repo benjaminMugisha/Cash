@@ -1,5 +1,5 @@
-import { createContext, useEffect, useReducer, useState } from "react";
-import { userInfo } from "./apiClient";
+import { createContext, useEffect, useReducer} from "react";
+import { userInfo } from "./apiClient"; 
 
 export const AuthContext = createContext();
 
@@ -57,6 +57,16 @@ export function AuthProvider({ children }) {
     fetchUser(); 
   }, [state.token]);
 
+  //re-fetch(update) user from backend.
+  const refreshUser = async () => {
+    try {
+      const res = await userInfo();
+      dispatch({ type: "SET_USER", payload: res.data }); 
+    } catch (err) {
+      dispatch({ type: "LOGOUT" })
+    }
+  };
+
   const login = (token) => {   
     localStorage.setItem("token", token);
     dispatch({ type: "LOGIN", payload: token });
@@ -72,7 +82,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, setSessionMessage }}>
+    <AuthContext.Provider value={{ ...state,refreshUser, login, logout, setSessionMessage }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { deposit } from "./apiClient"
+import { useContext, useState } from "react";
+import { deposit } from "./apiClient";
+import { AuthContext } from "./AuthContext";
 
 function Deposit() {
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
+  const {refreshUser} = useContext(AuthContext);
 
   const handleDeposit = async (e) => {
     e.preventDefault();
@@ -12,6 +14,7 @@ function Deposit() {
 
       setMessage(res.data.message);
       setAmount("");
+      refreshUser();
     } catch (err) {
       setMessage("❌ Deposit failed");  
     } 

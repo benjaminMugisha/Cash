@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { applyForLoan } from "./apiClient";
+import { AuthContext } from "./AuthContext";
 
 function LoanApplicationForm() {
+  const {refreshUser} = useContext(AuthContext);
   const [income, setIncome] = useState("");
   const [principal, setPrincipal] = useState("");
   const [monthsToRepay, setMonthsToRepay] = useState("");
@@ -12,10 +14,11 @@ function LoanApplicationForm() {
     e.preventDefault();
     setError("");
     setLoanData("");
-
+    refreshUser();  
     try {
       const res = await applyForLoan(income, principal, monthsToRepay);
       const { message, loanDto } = res.data;
+      refreshUser();
 
       setLoanData({
         message, 
@@ -23,7 +26,7 @@ function LoanApplicationForm() {
         monthlyPayment: loanDto.amountToPayEachMonth,
         nextPaymentDate: loanDto.nextPaymentDate
       });
-      
+          
     } catch (err) {
       setError(err.response?.data?.message || "❌ Loan application failed");
     }

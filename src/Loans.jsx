@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react"; 
+import { useContext, useEffect, useState } from "react"; 
 import { getLoanInfo, getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
+import { AuthContext } from "./AuthContext";
 
 function Loans() {
+  const {refreshUser} = useContext(AuthContext);
   const [loans, setLoans] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize] = useState(10); 
@@ -40,6 +42,7 @@ function Loans() {
   const repayFully = async (loanId) => {
     try {
       const response = await repayFullLoan(loanId);
+      refreshUser();
       setSuccess(`✅✅✅  ${response.data.message}`);
       setTimeout(() => setSuccess(""), 5000);
       fetchLoans(pageNo);
@@ -49,7 +52,8 @@ function Loans() {
   }
 
   const repayCustomAmount = async (loanId) => { 
-    const amount = customAmount[loanId]; 
+    const amount = customAmount[loanId];
+    refreshUser(); 
 
     if (!amount || amount <= 0) {
       setError("Please enter a valid amount");
@@ -58,11 +62,10 @@ function Loans() {
 
     try {
     const response = await repayCustom(loanId, amount); 
+    refreshUser();
     setSuccess(`✅✅✅  ${response.data.message}`);
-    console.log(`${response.data.message}`);
     setTimeout(() => setSuccess(""), 10000);
     fetchLoans(pageNo); 
-
     } catch (err) {
       setError("errorrrrr========");
     }

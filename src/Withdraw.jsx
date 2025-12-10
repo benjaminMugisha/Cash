@@ -1,20 +1,21 @@
-import React, { useState } from 'react'; 
+import React, { useContext, useState } from 'react'; 
 import { withdraw } from './apiClient'; 
+import { AuthContext } from './AuthContext';
 
 function Withdraw() { 
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
+    const {refreshUser} = useContext(AuthContext);
 
     const handleWithdraw = async (e) => {
         e.preventDefault(); 
 
         try {
           const res = await withdraw(parseFloat(amount));
-          console.log(res.data);
+          refreshUser();
           setMessage(res.data.message);
           setAmount(""); 
         } catch(err){
-          console.error("withdraw failed: ", err);
           setMessage("❌" + (err.response?.data?.message) || err.message || "Withdraw failed");  
         }
     };

@@ -1,5 +1,6 @@
-import { useState } from "react"; 
+import { useContext, useState } from "react"; 
 import { ddCreate } from "./apiClient";
+import { AuthContext } from "./AuthContext";
 
 function DirectDebitCreate() {
   const [toIban, setToIban] = useState("");
@@ -8,6 +9,7 @@ function DirectDebitCreate() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [successData, setSuccessData] = useState(null);
+  const {refreshUser} = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,17 +21,21 @@ function DirectDebitCreate() {
       console.log(res.data);       
 
       if(res.data.status === "UPDATED") 
-        setSuccess(`your direct debit to ${res.data.dto.toAccountUsername}  was updated to ${res.data.dto.amount}`);
+        setSuccess(`your direct debit to ${res.data.dto.toAccountUsername}  was updated to ${res.data.dto.amount}. 
+       next payment date is: ${res.data.dto.nextPaymentDate}`);
+      console.log(res.data.dto.toAccountUsername);
 
       if(res.data.status === "CREATED_AND_PAID") 
-        setSuccess(`direct debit creation to ${res.data.dto.status} of €${res.data.dto.amount}`);
+        setSuccess(`direct debit creation to ${res.data.dto.toAccountUsername} of €${res.data.dto.amount}.
+       next payment date is: ${res.data.dto.nextPaymentDate}`);
       setSuccessData(res.data.dto);
 
       setToIban("");
       setAmount("");
-      setError("")
+      setError("");
+      refreshUser();
 
-      setTimeout(() => setSuccessData(null), 5000);
+      setTimeout(() => setSuccessData(null), 15000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -82,7 +88,7 @@ function DirectDebitCreate() {
           <h3>Direct Debit Information: </h3>
           <p><strong>Amount:</strong> €{successData.amount}</p>
           <p><strong>Next Payment Date:</strong> {successData.nextPaymentDate}</p>
-          <p><strong>Status:</strong> {successData.active ? "Active" : "Inactive"}</p>
+          {/* <p><strong>Status:</strong> {successData.active ? "Active" : "Inactive"}</p> */} 
         </div>
       )}
     </div>

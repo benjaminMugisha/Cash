@@ -1,5 +1,4 @@
 import axios from "axios";
-import { sendSessionExpiredMessage } from "./authMessageHelper";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v2", 
@@ -35,8 +34,7 @@ apiClient.interceptors.response.use(
 
     return Promise.reject(error); 
   }
-)
-
+) 
 
 export const deposit = (amount) => {
   return apiClient.patch(`/accounts/deposit`, { amount });
@@ -59,6 +57,10 @@ export const ddCreate = (toIban, amount) => {
   return apiClient.post("/dd/create", {
     toIban, amount
   })
+}
+
+export const ddUpdate = (id, amount) => {
+  return apiClient.patch(`/dd/update/${id}`, { amount});
 }
 
 export const repayCustom = (loanId, amount) => {

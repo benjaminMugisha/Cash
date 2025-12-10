@@ -17,7 +17,6 @@ import NavBar from './NavBar'
 
 
 function App() {
-
   return (
    <>
    <NavBar />
@@ -38,7 +37,7 @@ function App() {
         <Route path='/transfer' element={ <Transfer /> } />
 
         <Route path='/loans' element={  <Loans /> } />
-        <Route path='/loan-apply' element={  < LoanApplicationForm /> } />
+        <Route path='/loans-apply' element={  < LoanApplicationForm /> } />
 
         <Route path='/dd' element={ < DirectDebits /> }/>
         <Route path='/dd-create' element={ < DirectDebitCreate /> }/>

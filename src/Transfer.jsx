@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { transfer } from "./apiClient";
+import { AuthContext } from './AuthContext';
 
 function Transfer() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ function Transfer() {
     amount: ""
   });
 
+  const {refreshUser} = useContext(AuthContext);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
@@ -24,7 +26,7 @@ function Transfer() {
       formData.toIban,
       parseFloat(formData.amount)
     ); 
-
+    refreshUser();
     setSuccess("✅ " + res.data.message);
     setFormData({ toIban: "", amount: "" });
     } catch (err) {

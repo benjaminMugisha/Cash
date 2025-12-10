@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { getDirectDebits, getLoans, getTransactions, userInfo } from './apiClient';
 import { AuthContext } from './AuthContext';
 import {Link} from "react-router-dom";
+import ActionCard from './ActionCard';
 
 function Dashboard() {
-    const {token} = useContext(AuthContext);
-    const [ user, setUser] = useState(null); //stateful user because we want the most recent data. 
-    // not from the context since context updates only when the token changes. 
+    const {token, user} = useContext(AuthContext);
     const [loansCount, setLoansCount] = useState(0); 
     const [ddCount, setddCount] = useState(0); 
-    const [recentT, setRecentT] = useState([]); //recent transactions.
+    const [recentT, setRecentT] = useState([]); 
     const [loading, setloading] = useState(true); 
     const [ error, setError] = useState("");
 
@@ -18,12 +17,11 @@ function Dashboard() {
 
         async function fetchData() {
             try {
-                const [userRes, loanRes, ddRes, txRes] = await Promise.all([
-                    userInfo(), getLoans(), getDirectDebits(), getTransactions(0, 3) 
-                ])
-                setloading(true) 
+                setloading(true);
 
-                setUser(userRes.data);
+                const [ loanRes, ddRes, txRes] = await Promise.all([
+                    getLoans(), getDirectDebits(), getTransactions(0, 3) 
+                ])
                 setLoansCount(loanRes.data.totalElements || 0);
                 setddCount((ddRes.data.totalElements) || 0);
                 setRecentT(txRes.data.content ?? []);
@@ -45,30 +43,27 @@ function Dashboard() {
     <div>
         <h1>Welcome {user?.firstName || user?.accountUsername}</h1>
 
-        <div>
-        <div style = {{ border: "1px solid #ddd", borderRadius: 8}}> 
-            <h3>Account Balance: </h3>
-            <p>€{user?.accountBalance ?? "N/A"}</p>
-        </div>
+        <ActionCard
+            title="is your account Balance"
+            count ={` ${user?.accountBalance}€`}
+            link="/"
+            buttonText="Go to Account"
+            showWhenZero={true}
+        />
 
-        <div style = {{ border: "1px solid #ddd", borderRadius: 8}}> 
-            <h3>Active loans</h3>
-            <p>{loansCount}</p>
+        <ActionCard 
+            title="Active Loans"
+            count={loansCount}
+            link="/loans"
+            buttonText="View / Repay / Apply"
+        />
 
-            <Link to="/loans">
-                <button>👉Your active loans</button>
-            </Link> 
-        </div>
-
-        <div style = {{ border: "1px solid #ddd", borderRadius: 8}}> 
-            <h3>Direct Debits:</h3>
-            <p>{ddCount}</p>
-
-            <Link to="/dd">
-                <button>👉 your Direct Debits</button>
-            </Link>
-        </div>
-        </div>
+        <ActionCard
+            title="Active Direct Debits"
+            count={ddCount}
+            link="/dd"
+            buttonText="View / Update Amount / Cancel"
+        />
 
         <section style={{ marginTop: 20 }}>
             <h3>Recent transactions:</h3>
@@ -85,9 +80,10 @@ function Dashboard() {
                 </ul>
             )} 
             <Link to="/transactions">
-            <button>👉 Your transactions</button>
+            <button>👉 click to view Your transactions</button>
             </Link>
         </section>
+
     </div>
   );
 }

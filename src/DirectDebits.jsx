@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react"; 
-import { cancelDD, getDirectDebits } from "./apiClient"; 
+import { useState, useEffect, useContext } from "react"; 
+import { cancelDD, ddUpdate, getDirectDebits } from "./apiClient"; 
+import { AuthContext } from "./AuthContext";
 
 function DirectDebits() {
+  const {refreshUser} = useContext(AuthContext);
   const [debits, setDebits] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize] = useState(10); 
@@ -9,6 +11,8 @@ function DirectDebits() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  const [editAmounts, setEditAmounts] = useState({});
 
   useEffect(() => {
     fetchDebits(pageNo);
@@ -23,6 +27,12 @@ function DirectDebits() {
       setDebits(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
+
+      //Reset input fields on reload:
+      const initialInputs = {};
+      res.data.content.forEach(dd => initialInputs[dd.id] = dd.amount);
+      setEditAmounts(initialInputs)
+
     } catch (err) {
       setError("Failed to load direct debits");
     } finally {
@@ -42,7 +52,7 @@ function DirectDebits() {
   const cancelDebit = async (loanId, toAccountUsername, amount) => {
     try {
       await cancelDD(loanId);
-      setMessage(`✅ your direct debit of ${amount}€ per month to "${toAccountUsername}" cancelled`);  
+      setMessage(`✅ your direct debit of ${amount}€ per month to "${toAccountUsername}" ❌cancelled`);  
       setTimeout(() => setMessage(""), 5000);
 
       fetchDebits(pageNo); 
@@ -50,6 +60,19 @@ function DirectDebits() {
       setError(err.response?.data?.message || "Failed to cancel the direct debit");
     }
   }; 
+
+  // update debit handler:
+  const updateDebit = async (id) => {
+    try {
+      const res = await ddUpdate(id, editAmounts[id]);
+      setMessage(`Direct debit to ${res.data.dto.toAccountUsername} updated to ${editAmounts[id]}€ per month`);
+      refreshUser();
+      setTimeout(() => setMessage(""), 10000);
+      fetchDebits(pageNo); 
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update the direct debit"); 
+    }
+  };
 
   return (
     <div>
@@ -69,6 +92,7 @@ function DirectDebits() {
               <th> Amount per Month: </th>
               <th> next payment Date </th>
               <th> Status </th>
+              <th> Update </th>
               <th> Action </th>
             </tr>
           </thead>
@@ -78,9 +102,29 @@ function DirectDebits() {
               <tr key={dd.id}>
                 <td>{dd.fromAccountUsername}</td>
                 <td>{dd.toAccountUsername}</td>
-                <td>€{dd.amount.toFixed(2)}</td>
+
+                {/* <td>€{dd.amount.toFixed(2)}</td> */}
+                <td>
+                  <input 
+                    type="number" step="0.01" 
+                    value={editAmounts[dd.id] ?? dd.amount}
+                    onChange={(e) => 
+                      setEditAmounts((prev) => ({
+                        ...prev, [dd.id]: e.target.value,
+                      }))
+                    }
+                  />
+                </td>
+
                 <td>{dd.nextPaymentDate}</td>
                 <td>{dd.active ? "active" : "cancelled"}</td>
+
+                <td>{dd.active && (
+                  <button onClick={() => updateDebit(dd.id)}>
+                    Update
+                  </button>
+                )}</td>
+
                 <td>{dd.active && (
                   <button onClick={() => cancelDebit(dd.id, dd.toAccountUsername, dd.amount)}> Cancel </button>
                 )} </td>

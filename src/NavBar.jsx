@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css"; 
 import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "./AuthContext"; 
 
 function Navbar() {
   const location = useLocation();  
-  const token = useContext(AuthContext);
+  const {token, user, logout} = useContext(AuthContext);
 
   const isActive = (path) => location.pathname === path; 
 
@@ -18,8 +18,16 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
+      {/* <button style={{ color: "red" }}
+      onClick={() => {logout();
+        alert("you have logged out");
+        Navigate("/logout")
+      }} > Logout </button> */} 
         {token && (  
           <>
+          <span style={{ marginRight: "20px", border:"5px solid"}}>
+            {user?.firstname} - {user?.accountBalance}€
+          </span>
             <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard">
               Dashboard
             </Link>
@@ -29,12 +37,12 @@ function Navbar() {
             </Link>
 
             <Link className={isActive("/dd") ? "active" : ""} to="/dd">
-              Direct Debits
+              Direct Debits 
             </Link>
 
             <Link className={isActive("/transactions") ? "active" : ""} to="/transactions">
               Transactions
-            </Link>
+            </Link> 
           </>
         )}
 
