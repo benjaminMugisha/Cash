@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import Register from './Register'
-import Accounts from './Accounts'
+import Accounts from './Admin/Accounts'
 import Login from './Login'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
@@ -14,16 +14,22 @@ import TransactionHistory from './TransactionHistory'
 import ProtectedRoute from './ProtectedRoute'
 import Dashboard from './Dashboard'
 import NavBar from './NavBar'
+import AdminDashboard from './Admin/AdminDashboard'
+import Users from './Admin/Users'
+import PublicRoute from './PublicRoute'
 
 
 function App() {
+
   return (
    <>
    <NavBar />
     <Routes>
-      <Route path='/register' element={ <Register />} />
-      <Route path='/login' element={<Login />} />
-      
+      <Route element={<PublicRoute />}>
+        <Route path='/register' element={ <Register />} />
+        <Route path='/login' element={<Login />} />
+      </Route>
+      {/* <Route path='/logout' element={<Logout />}/> */}
 
       <Route element={<ProtectedRoute />}> 
 
@@ -31,7 +37,6 @@ function App() {
         <Route path='/' element={ <UserProfile /> } />
         <Route path='/transactions' element={ < TransactionHistory /> }/>
 
-        <Route path='/accounts' element={ <Accounts /> } />
         <Route path='/withdraw' element={ <Withdraw /> } />
         <Route path='/deposit' element={ <Deposit /> } />
         <Route path='/transfer' element={ <Transfer /> } />
@@ -41,6 +46,11 @@ function App() {
 
         <Route path='/dd' element={ < DirectDebits /> }/>
         <Route path='/dd-create' element={ < DirectDebitCreate /> }/>
+      </Route> 
+
+      <Route path="/admin" element={ <AdminDashboard /> }>
+        <Route path="accounts" element={<Accounts />}/>
+        <Route path="users" element={<Users />} />
       </Route>
 
       <Route path="*" element={<h1>404. Page Not Found</h1>} />

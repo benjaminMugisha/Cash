@@ -5,10 +5,13 @@ import { AuthContext } from "./AuthContext";
 function Deposit() {
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
-  const {refreshUser} = useContext(AuthContext);
+  const {refreshUser, loading} = useContext(AuthContext);
 
   const handleDeposit = async (e) => {
     e.preventDefault();
+    
+    if(loading) return <h1>Loading...</h1>
+
     try {
       const res = await deposit(parseFloat(amount));
 

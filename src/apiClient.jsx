@@ -1,11 +1,10 @@
-import axios from "axios";
+import axios from "axios"; 
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v2", 
 });
 export default apiClient;
 
-//request interceptor to add the token in the header. 
 apiClient.interceptors.request.use( (config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,7 +15,6 @@ apiClient.interceptors.request.use( (config) => {
 (err) => Promise.reject(err)
 );
 
-//response interceptor to detect expired tokens: 
 apiClient.interceptors.response.use(
   (response) => response ,
   (error) => {
@@ -25,11 +23,9 @@ apiClient.interceptors.response.use(
       error.response.data.message === "JWT token has expired. Please log in again."
     ) {
 
-      //clear token and redirect the user to login.
       localStorage.removeItem("token");
-      // sendSessionExpiredMessage("your session has expired. Please login again");
       localStorage.setItem("sessionMessage", "Your session has expired. Please login again");
-      window.location.href = "/login" //redirecting.
+      window.location.href = "/login" 
     }
 
     return Promise.reject(error); 
@@ -98,12 +94,16 @@ export const getTransactions = (pageNo, pageSize) => {
   })
 }
 
-
 export const userInfo = () => {
   return apiClient.get("/auth/me");
 }
 
-
 export const getLoanInfo = (loanId) => {
   return apiClient.get(`/loans/${loanId}`);
+}
+
+export const getUsers = (pageNo, pageSize) => {
+  return apiClient.get("/auth/users", {
+    params: {pageNo, pageSize}
+  });
 }

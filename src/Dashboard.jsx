@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react'; 
 import { getDirectDebits, getLoans, getTransactions, userInfo } from './apiClient';
 import { AuthContext } from './AuthContext';
 import {Link} from "react-router-dom";
@@ -10,7 +10,7 @@ function Dashboard() {
     const [ddCount, setddCount] = useState(0); 
     const [recentT, setRecentT] = useState([]); 
     const [loading, setloading] = useState(true); 
-    const [ error, setError] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if(!token) return;
@@ -63,6 +63,11 @@ function Dashboard() {
             count={ddCount}
             link="/dd"
             buttonText="View / Update Amount / Cancel"
+        />
+         <ActionCard
+            title="Logout"
+            link="/logout"
+            buttonText="Logout??"
         />
 
         <section style={{ marginTop: 20 }}>

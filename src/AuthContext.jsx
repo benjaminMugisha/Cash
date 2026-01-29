@@ -21,6 +21,7 @@ function authReducer(state, action) {
       ...state, user:action.payload, loading:false
     };
     case "LOGOUT":
+      localStorage.removeItem("token");  
       return { 
         ...initialState 
     }; 
@@ -73,7 +74,6 @@ export function AuthProvider({ children }) {
   }
 
   const logout = () => { 
-    localStorage.removeItem("token");  
     dispatch({ type: "LOGOUT" });
   }
 
@@ -82,7 +82,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state,refreshUser, login, logout, setSessionMessage }}>
+    <AuthContext.Provider value={{ ...state, refreshUser, login, logout, setSessionMessage }}>
       {children}
     </AuthContext.Provider>
   );

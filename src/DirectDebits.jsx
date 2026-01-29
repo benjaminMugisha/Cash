@@ -3,15 +3,13 @@ import { cancelDD, ddUpdate, getDirectDebits } from "./apiClient";
 import { AuthContext } from "./AuthContext";
 
 function DirectDebits() {
-  const {refreshUser} = useContext(AuthContext);
+  const {refreshUser, loading} = useContext(AuthContext);
   const [debits, setDebits] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize] = useState(10); 
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-
   const [editAmounts, setEditAmounts] = useState({});
 
   useEffect(() => {
@@ -19,7 +17,7 @@ function DirectDebits() {
   }, [pageNo]);
 
   const fetchDebits = async (pageNo) => {
-    setLoading(true);
+    // setLoading(true);
     setError("");
     try {
       const res = await getDirectDebits(pageNo, pageSize);
@@ -28,15 +26,15 @@ function DirectDebits() {
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
 
-      //Reset input fields on reload:
       const initialInputs = {};
       res.data.content.forEach(dd => initialInputs[dd.id] = dd.amount);
       setEditAmounts(initialInputs)
 
     } catch (err) {
       setError("Failed to load direct debits");
-    } finally {
-      setLoading(false);
+    // } finally {
+    //   setLoading(false);
+    // }
     }
   };
 
@@ -48,10 +46,10 @@ function DirectDebits() {
     if (pageNo < totalPages - 1) setPageNo(pageNo + 1);
   };
   
-
   const cancelDebit = async (loanId, toAccountUsername, amount) => {
     try {
       await cancelDD(loanId);
+      refreshUser(); 
       setMessage(`✅ your direct debit of ${amount}€ per month to "${toAccountUsername}" ❌cancelled`);  
       setTimeout(() => setMessage(""), 5000);
 
@@ -61,12 +59,33 @@ function DirectDebits() {
     }
   }; 
 
-  // update debit handler:
   const updateDebit = async (id) => {
-    try {
+    const originalAmount = debits.find(d => d.id === id)?.amount;
+    const newAmount = Number(editAmounts[id]);
+
+    // if(newAmount === 0) {
+    //   try {
+    //     await cancelDD(id); 
+    //     refreshUser();
+
+    //     const toAccount = debits.find(d => d.id)
+    //   }
+    // }
+    
+    if (Number(originalAmount) === newAmount) {
+      setMessage("Direct debit amount unchanged"); 
+      setTimeout(() => setMessage(""), 5000); 
+      return; 
+    }
+
+    try { 
       const res = await ddUpdate(id, editAmounts[id]);
-      setMessage(`Direct debit to ${res.data.dto.toAccountUsername} updated to ${editAmounts[id]}€ per month`);
+      if(res.data.dto.status === "UNCHANGED") {
+        setMessage("Direct Debit amount unchanged. ")
+      } else {
+      setMessage(`Direct debit to ${res.data.dto.toAccountUsername} updated from ${originalAmount}€ to ${res.data.dto.amount}€ per month`);
       refreshUser();
+      }
       setTimeout(() => setMessage(""), 10000);
       fetchDebits(pageNo); 
     } catch (err) {
@@ -89,8 +108,9 @@ function DirectDebits() {
             <tr> 
               <th> From: </th>
               <th> to account: </th>
-              <th> Amount per Month: </th>
+              <th>Amount per month: </th>
               <th> next payment Date </th>
+              <th> Change Amount: </th>
               <th> Status </th>
               <th> Update </th>
               <th> Action </th>
@@ -102,25 +122,21 @@ function DirectDebits() {
               <tr key={dd.id}>
                 <td>{dd.fromAccountUsername}</td>
                 <td>{dd.toAccountUsername}</td>
-
-                {/* <td>€{dd.amount.toFixed(2)}</td> */}
-                <td>
-                  <input 
-                    type="number" step="0.01" 
-                    value={editAmounts[dd.id] ?? dd.amount}
-                    onChange={(e) => 
-                      setEditAmounts((prev) => ({
-                        ...prev, [dd.id]: e.target.value,
-                      }))
-                    }
+                <td>{dd.amount}</td>
+                <td>{dd.nextPaymentDate}</td> 
+                
+                <td> <input type="number" min="10" placeholder="amount"
+                  onChange={(e) => setEditAmounts((prev) => ({
+                    ...prev, [dd.id]: e.target.value,
+                  }))}
                   />
                 </td>
 
-                <td>{dd.nextPaymentDate}</td>
                 <td>{dd.active ? "active" : "cancelled"}</td>
 
                 <td>{dd.active && (
-                  <button onClick={() => updateDebit(dd.id)}>
+                  <button disabled={Number(editAmounts[dd.id] === Number(dd.amount))}
+                  onClick={() => updateDebit(dd.id)}>
                     Update
                   </button>
                 )}</td>

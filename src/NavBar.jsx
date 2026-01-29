@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import "./Navbar.css"; 
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext"; 
@@ -18,11 +18,13 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
+
       {/* <button style={{ color: "red" }}
       onClick={() => {logout();
         alert("you have logged out");
-        Navigate("/logout")
-      }} > Logout </button> */} 
+        Link("/login")
+      }} > Logout </button>  */} 
+
         {token && (  
           <>
           <span style={{ marginRight: "20px", border:"5px solid"}}>

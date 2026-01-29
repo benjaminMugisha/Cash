@@ -142,4 +142,5 @@ function Loans() {
     </div>
   );
 }
+
 export default Loans;

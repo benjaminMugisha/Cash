@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthContext";
 function DirectDebitCreate() {
   const [toIban, setToIban] = useState("");
   const [amount, setAmount] = useState("");
-  const [loading, setLoading] = useState(false);
+  const {loading} = useContext(AuthContext);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [successData, setSuccessData] = useState(null);
@@ -13,8 +13,6 @@ function DirectDebitCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
 
     try {
       const res = await ddCreate(toIban, parseFloat(amount));
@@ -42,7 +40,6 @@ function DirectDebitCreate() {
         "❌ Failed to create direct debit"
       );
     } finally {
-      setLoading(false);
       setError("");
     }  
   };
@@ -88,7 +85,6 @@ function DirectDebitCreate() {
           <h3>Direct Debit Information: </h3>
           <p><strong>Amount:</strong> €{successData.amount}</p>
           <p><strong>Next Payment Date:</strong> {successData.nextPaymentDate}</p>
-          {/* <p><strong>Status:</strong> {successData.active ? "Active" : "Inactive"}</p> */} 
         </div>
       )}
     </div>

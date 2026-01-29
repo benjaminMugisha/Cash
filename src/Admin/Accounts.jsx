@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAccounts } from "./apiClient"; 
+import { getAccounts } from "../apiClient"; 
 
 function Accounts() {
   const [accounts, setAccounts] = useState([]);
@@ -20,13 +20,13 @@ function Accounts() {
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
 
-
     } catch (err) {
       setError("failed to fetch accounts"); 
     } finally {
       setLoading(false);
     } 
   }
+
   useEffect(() => {
     fetchAccounts(pageNo); 
   }, [pageNo]);
@@ -69,7 +69,7 @@ function Accounts() {
         </table>
       )}
 
-      <div tyle={{ marginTop: 20 }}>
+      <div style={{ marginTop: 20 }}>
         <button onClick={handlePrev} disabled={pageNo === 0}>
           Previous
         </button>

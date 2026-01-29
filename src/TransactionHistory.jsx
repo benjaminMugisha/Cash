@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getTransactions } from "./apiClient";
+import { AuthContext } from "./AuthContext";
 
 function TransactionHistory() {
   const [transactions, setTransactions] = useState([]);
@@ -7,14 +8,13 @@ function TransactionHistory() {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize] = useState(10); 
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const {loading} = useContext(AuthContext);
 
   useEffect(() => {
     fetchTransactions(pageNo);
   }, [pageNo]);
 
   const fetchTransactions = async (pageNo) => {
-    setLoading(true);
     try {
       const res = await getTransactions(pageNo, pageSize);
       setTransactions(res.data.content);
@@ -24,9 +24,6 @@ function TransactionHistory() {
     catch (err) {
       setError(err.response?.data?.message || "Failed to load transactions");
     } 
-    finally {
-      setLoading(false);
-    }
   };
 
   const handlePrev = () => { 
