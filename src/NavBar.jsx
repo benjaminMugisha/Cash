@@ -22,8 +22,9 @@ function Navbar() {
       {/* <button style={{ color: "red" }}
       onClick={() => {logout();
         alert("you have logged out");
-        Link("/login")
-      }} > Logout </button>  */} 
+        // Link("/login")
+        Navigate("/login")
+       }} > Logout </button>   */}
 
         {token && (  
           <>

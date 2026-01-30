@@ -20,8 +20,7 @@ function authReducer(state, action) {
          return {
       ...state, user:action.payload, loading:false
     };
-    case "LOGOUT":
-      localStorage.removeItem("token");  
+    case "LOGOUT": 
       return { 
         ...initialState 
     }; 
@@ -74,6 +73,7 @@ export function AuthProvider({ children }) {
   }
 
   const logout = () => { 
+    localStorage.removeItem("token"); 
     dispatch({ type: "LOGOUT" });
   }
 

@@ -32,6 +32,25 @@ apiClient.interceptors.response.use(
   }
 ) 
 
+
+export const userInfo = () => {
+  return apiClient.get("/auth/me");
+}
+export const getUsers = (pageNo, pageSize) => {
+  return apiClient.get("/auth/users", {
+    params: {pageNo, pageSize}
+  });
+}
+
+
+
+
+
+
+export const getAccounts = (pageNo, pageSize) =>{
+  return apiClient.get(`/accounts/all`, {
+    params: { pageNo, pageSize }});
+} 
 export const deposit = (amount) => {
   return apiClient.patch(`/accounts/deposit`, { amount });
 }
@@ -44,49 +63,52 @@ export const transfer = ( toIban, amount) => {
   return apiClient.patch("/accounts/transfer", { toIban, amount });
 }
 
+
+
+
+
+
 export const getLoans = (pageNo, pageSize) => {
   return apiClient.get(`/auth/me/loans`, { 
   params: { pageNo, pageSize }});
 }
+export const getLoanInfo = (loanId) => {
+  return apiClient.get(`/loans/${loanId}`);
+}
+export const repayCustom = (loanId, amount) => {
+  return apiClient.patch(`/loans/repay/${loanId}`, { amount });
+}
+export const repayFullLoan = (loanId) => { 
+  return apiClient.patch(`/loans/repay-full/${loanId}`);
+}
+export const applyForLoan = (income, principal, monthsToRepay) => {
+  return apiClient.post(`/loans/apply`, 
+   { income, principal, monthsToRepay }
+  );
+}
+
+
+
 
 export const ddCreate = (toIban, amount) => {
   return apiClient.post("/dd/create", {
     toIban, amount
   })
 }
-
 export const ddUpdate = (id, amount) => {
   return apiClient.patch(`/dd/update/${id}`, { amount});
 }
-
-export const repayCustom = (loanId, amount) => {
-  return apiClient.patch(`/loans/repay/${loanId}`, { amount });
-}
-
-export const repayFullLoan = (loanId) => { 
-  return apiClient.patch(`/loans/repay-full/${loanId}`);
-}
-
-export const getAccounts = (pageNo, pageSize) =>{
-  return apiClient.get(`/accounts/all`, {
-    params: { pageNo, pageSize }});
-} 
-
 export const getDirectDebits = (pageNo, pageSize) => {
-  return apiClient.get(`/auth/me/direct-debits`, {
+  return apiClient.get(`/dd/get`, {
     params: { pageNo, pageSize}
   });
 }
-
 export const cancelDD = (loanId) => {
   return apiClient.patch(`dd/cancel/${loanId}`);
 }
 
- export const applyForLoan = (income, principal, monthsToRepay) => {
-  return apiClient.post(`/loans/apply`, 
-   { income, principal, monthsToRepay }
-  );
- }
+
+
 
 export const getTransactions = (pageNo, pageSize) => {
   return apiClient.get("/transactions", {
@@ -94,16 +116,8 @@ export const getTransactions = (pageNo, pageSize) => {
   })
 }
 
-export const userInfo = () => {
-  return apiClient.get("/auth/me");
-}
 
-export const getLoanInfo = (loanId) => {
-  return apiClient.get(`/loans/${loanId}`);
-}
-
-export const getUsers = (pageNo, pageSize) => {
-  return apiClient.get("/auth/users", {
-    params: {pageNo, pageSize}
-  });
+//admin
+export const getAdminCount = () => {
+  return apiClient.get("/admin/dashboard/stats")
 }

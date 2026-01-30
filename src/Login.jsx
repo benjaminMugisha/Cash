@@ -7,7 +7,6 @@ function Login() {
   const { login } = useContext(AuthContext); 
   const navigate = useNavigate(); 
 
-
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",

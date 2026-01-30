@@ -17,6 +17,7 @@ import NavBar from './NavBar'
 import AdminDashboard from './Admin/AdminDashboard'
 import Users from './Admin/Users'
 import PublicRoute from './PublicRoute'
+import AdminHome from './Admin/AdminHome'
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
       </Route> 
 
       <Route path="/admin" element={ <AdminDashboard /> }>
+        <Route index element={<AdminHome />} />
         <Route path="accounts" element={<Accounts />}/>
         <Route path="users" element={<Users />} />
       </Route>

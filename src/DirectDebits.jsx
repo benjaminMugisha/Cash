@@ -17,7 +17,6 @@ function DirectDebits() {
   }, [pageNo]);
 
   const fetchDebits = async (pageNo) => {
-    // setLoading(true);
     setError("");
     try {
       const res = await getDirectDebits(pageNo, pageSize);
@@ -32,9 +31,6 @@ function DirectDebits() {
 
     } catch (err) {
       setError("Failed to load direct debits");
-    // } finally {
-    //   setLoading(false);
-    // }
     }
   };
 
@@ -63,15 +59,6 @@ function DirectDebits() {
     const originalAmount = debits.find(d => d.id === id)?.amount;
     const newAmount = Number(editAmounts[id]);
 
-    // if(newAmount === 0) {
-    //   try {
-    //     await cancelDD(id); 
-    //     refreshUser();
-
-    //     const toAccount = debits.find(d => d.id)
-    //   }
-    // }
-    
     if (Number(originalAmount) === newAmount) {
       setMessage("Direct debit amount unchanged"); 
       setTimeout(() => setMessage(""), 5000); 
@@ -80,13 +67,20 @@ function DirectDebits() {
 
     try { 
       const res = await ddUpdate(id, editAmounts[id]);
-      if(res.data.dto.status === "UNCHANGED") {
-        setMessage("Direct Debit amount unchanged. ")
-      } else {
+      console.log(res.data.status);
+      const status = res.data.status;
+
+      if(status === "CANCELLED") {
+        setMessage(`Direct Debit to ${res.data.dto.toAccountUsername} cancelled. `)
+      } else if (status === "UNCHANGED") {
+        setMessage(`Direct debit ${res.data.dto.amount} unchanged`)
+      } else if( status === "UPDATED") {
       setMessage(`Direct debit to ${res.data.dto.toAccountUsername} updated from ${originalAmount}€ to ${res.data.dto.amount}€ per month`);
       refreshUser();
       }
-      setTimeout(() => setMessage(""), 10000);
+
+      setTimeout(() => setMessage(""), 20000);
+      refreshUser();
       fetchDebits(pageNo); 
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update the direct debit"); 

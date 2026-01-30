@@ -7,15 +7,12 @@ function AdminDashboard() {
 
     if(loading) return <p>Loading....</p>
     if(!user) return <Navigate to="/login" replace/>
-    
-    // AdminDashboard must check user.role: 
     if(user.role !== "ADMIN") return <Navigate to="/dashboard" replace/>
 
     return (
       <>
         <h1>Welcome Admin {user.firstname}</h1>
 
-        {/* Admin sidebar */}
       <aside style={{ width: "200px", borderRight: "1px solid #ccc" }}>
         <ul>
           <li><Link to="users">Users</Link></li>
@@ -23,14 +20,10 @@ function AdminDashboard() {
         </ul>
       </aside>
 
-      {/* Main content of Nested Admin pages render here: */}
       <main style={{padding:"20px", flex:1}}>
-        <Outlet /> {/* render the child route here */}
-        {/* without <Outlet /> react wouldn't know where to render Users and Accounts. 
-         */}
+        <Outlet />
       </main>
       </>
     );
 }
-  
 export default AdminDashboard;
