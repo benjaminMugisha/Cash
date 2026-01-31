@@ -17,6 +17,10 @@ function AdminDashboard() {
         <ul>
           <li><Link to="users">Users</Link></li>
           <li><Link to="accounts">Accounts</Link></li>
+
+          <li><Link to="dd">all direct debits</Link></li> 
+           <li><Link to="loans">Loans</Link></li>
+          <li><Link to="tx">all transactions</Link></li>
         </ul>
       </aside>
 

@@ -18,6 +18,9 @@ import AdminDashboard from './Admin/AdminDashboard'
 import Users from './Admin/Users'
 import PublicRoute from './PublicRoute'
 import AdminHome from './Admin/AdminHome'
+import AdminDDs from './Admin/AdminDDs'
+import AdminLoans from './Admin/AdminLoans'
+import AdminTransactions from './Admin/AdminTransactions'
 
 
 function App() {
@@ -53,6 +56,9 @@ function App() {
         <Route index element={<AdminHome />} />
         <Route path="accounts" element={<Accounts />}/>
         <Route path="users" element={<Users />} />
+        <Route path="dd" element={< AdminDDs/>}/>
+        <Route path="loans" element={ <AdminLoans />} />
+        <Route path="tx" element={<AdminTransactions />} />
       </Route>
 
       <Route path="*" element={<h1>404. Page Not Found</h1>} />

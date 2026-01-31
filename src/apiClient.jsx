@@ -121,3 +121,19 @@ export const getTransactions = (pageNo, pageSize) => {
 export const getAdminCount = () => {
   return apiClient.get("/admin/dashboard/stats")
 }
+
+export const getAdminDD = (pageNo, pageSize) => {
+  return apiClient.get("/admin/dashboard/dd", {
+    params : {pageNo, pageSize}
+  })
+}
+export const getAdminLoans = (pageNo, pageSize) => {
+  return apiClient.get("/admin/dashboard/loans", {
+    params: {pageNo, pageSize}
+  });
+}
+export const getAdminTx = (pageNo, pageSize) => {
+  return apiClient.get("/admin/dashboard/tx", {
+    params: {pageNo, pageSize}
+  });
+}

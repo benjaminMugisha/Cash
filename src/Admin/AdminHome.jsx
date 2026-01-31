@@ -10,19 +10,20 @@ function AdminHome() {
     useEffect(() => {
         loadStats();
     }, []);
+
     const loadStats = async () => {
         try{
             const res = await getAdminCount();
             setStats(res.data);
-            console.log(res.data.totalUsers);
-
+            
         } catch (err) {
             setError("Failed to load admin stats");
         } 
     };
 
     if(loading) return <h2>Loading dashboard....</h2>
-    // if(error) return <h2>{error}</h2>
+    if(!stats) return <h2>Loading stats...</h2>
+    if(error) return <h2>{error}</h2>
 
   return (
     <div>
