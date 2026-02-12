@@ -1,33 +1,34 @@
 import { useEffect, useState } from "react";
-import { getAdminLoans } from "../apiClient";
+import { getActiveDds } from "../apiClient"; 
 
-function AdminLoans() {
-  const [loans, setLoans] = useState([]);
+function AdminActiveDds() {
+  const [dd, setDDs] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize] = useState(10); 
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchLoans = async (page) => {
+  const fetchActiveDDs = async (page) => {
     setLoading(true);
     setError("");
-    try {
-      const res = await getAdminLoans(pageNo, pageSize);
 
-      setLoans(res.data.content);
+    try {
+      const res = await getActiveDds(page, pageSize);
+
+      setDDs(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
 
     } catch (err) {
-      setError("failed to fetch accounts"); 
+      setError("failed to fetch direct debits"); 
     } finally {
       setLoading(false);
     } 
   }
 
   useEffect(() => {
-    fetchLoans(pageNo); 
+    fetchActiveDDs(pageNo); 
   }, [pageNo]);
 
   const handlePrev = () => { 
@@ -40,36 +41,32 @@ function AdminLoans() {
 
   return (
     <div>
-      <h2>All Loans</h2>
+      <h2>All Active Direct Debits</h2>
 
       { error && <p style={{ color: "red" }}>{ error }</p>}
       {loading ? (<p>Loading ....</p>) :
-      loans.length === 0 ? (
-        <p>No Loans found. </p>
+      dd.length === 0 ? (
+        <p>No Direct debits found. </p>
       ) : (
         <table border="1">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Owner</th>
-              <th>Principal €</th>
-              <th>remaining amount</th>
-              <th>loan date</th>
+              <th>from username</th>
+              <th>to username</th>
+              <th>amount</th>
               <th>next payment</th>
-              <th>active?</th>
             </tr>
           </thead>
 
           <tbody>
-            {loans.map((loans) => (
-              <tr key={loans.loanId}>
-                <td>{loans.loanId}</td>
-                <td>{loans.loanOwner}</td>
-                <td>{loans.principal}</td>
-                <td>{loans.remainingBalance}</td>
-                <td>{loans.startDate}</td>
-                <td>{loans.nextPaymentDate}</td>
-                <td>{loans.active ? "Yes" : "No"}</td>
+            {dd.map((dd) => (
+              <tr key={dd.id}>
+                <td>{dd.id}</td>
+                <td>{dd.fromAccountUsername}</td>
+                <td>{dd.toAccountUsername}</td>
+                <td>{dd.amount.toFixed(2)}</td>
+                <td>{dd.nextPaymentDate}</td>
               </tr>
             ))}
           </tbody>
@@ -92,4 +89,4 @@ function AdminLoans() {
   );
 }
 
-export default AdminLoans;
+export default AdminActiveDds;

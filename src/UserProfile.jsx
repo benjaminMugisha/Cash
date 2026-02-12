@@ -10,7 +10,7 @@ function UserProfile() {
 
   return (
     <div>
-      <h2>Your Profile:</h2>
+      <h2>Your Profile: </h2>
       <p><strong>Username:</strong> {user.accountUsername}</p>
       <p><strong>Balance:</strong> €{user.accountBalance}</p>
       <p><strong>First Name:</strong> {user.firstname}</p>

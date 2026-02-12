@@ -21,6 +21,9 @@ import AdminHome from './Admin/AdminHome'
 import AdminDDs from './Admin/AdminDDs'
 import AdminLoans from './Admin/AdminLoans'
 import AdminTransactions from './Admin/AdminTransactions'
+import AdminActiveDds from './Admin/AdminActiveDds'
+import AdminCreate from './Admin/AdminCreate'
+import Admins from './Admin/Admins'
 
 
 function App() {
@@ -56,9 +59,12 @@ function App() {
         <Route index element={<AdminHome />} />
         <Route path="accounts" element={<Accounts />}/>
         <Route path="users" element={<Users />} />
-        <Route path="dd" element={< AdminDDs/>}/>
+        <Route path="activedds" element={<AdminActiveDds />} />
+        <Route path="dd" element={< AdminDDs />}/>
         <Route path="loans" element={ <AdminLoans />} />
         <Route path="tx" element={<AdminTransactions />} />
+        <Route path="create-admin" element={<AdminCreate />}/>
+        <Route path="admins" element={<Admins />}/>
       </Route>
 
       <Route path="*" element={<h1>404. Page Not Found</h1>} />

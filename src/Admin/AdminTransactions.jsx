@@ -15,7 +15,6 @@ function AdminTransactions() {
     try {
       const res = await getAdminTx(pageNo, pageSize);
 
-      console.log(res.data)
       setTx(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
@@ -67,7 +66,7 @@ function AdminTransactions() {
                 <td>{tx.accountUsername}</td>
                 <td>{tx.type}</td>
                 <td>{tx.amount}</td>
-                <td>{tx.timestamp}</td>
+                <td>{tx.timeStamp}</td>
                 <td>{tx.toAccountUsername}</td>
               </tr>
             ))}

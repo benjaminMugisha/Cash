@@ -9,7 +9,6 @@ function AdminDDs() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   const fetchDDs = async (page) => {
     setLoading(true);
     setError("");

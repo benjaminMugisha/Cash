@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"; 
-import { getLoanInfo, getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
-import { AuthContext } from "./AuthContext";
+import {  getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
+import { AuthContext } from "./AuthContext"; 
 
 function Loans() {
   const {refreshUser} = useContext(AuthContext);
@@ -18,12 +18,14 @@ function Loans() {
   }, [pageNo]);
 
   const fetchLoans = async (pageNo, pageSize) => {
+
     setLoading(true); 
     try {
-      const res = await getLoans(pageNo, pageSize)
+      const res = await getLoans(pageNo, pageSize);
       setLoans(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
+
     } catch (err) {
       setError("failed to fetch loans");
     } finally {

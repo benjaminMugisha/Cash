@@ -1,5 +1,7 @@
-import { useState } from "react"; 
-import axios from "axios";
+import { useContext, useState } from "react"; 
+import { register } from "./apiClient";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
 
 function Register() {
   const[user, setUser] = useState({
@@ -15,6 +17,9 @@ function Register() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
+  const {login} = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const handleChanges = (e) => {
     setUser({
         ...user,
@@ -26,30 +31,37 @@ function Register() {
     e.preventDefault();
     
     try {
-        const res = await axios.post("http://localhost:8080/api/v2/auth/register", user);
-        setSuccess("✅Registration successful!");
-        console.log(res.data) 
-        setUser({
-            firstName: '', lastName: '', accountUsername: '', balance: '', email: '', password: ''
-        });
 
-        setError(""); 
-        setFieldErrors({});
+        const res = await register(user.firstName, user.lastName, user.accountUsername,
+           user.balance, user.email, user.password);
+        console.log(res)
+        login(res.data.token);
+        navigate("/")
+
     } catch (err) {
-        const apiError = err.response?.data;
+      const apiError = err.response?.data;
+      const status = err.response?.status;
 
-        if(apiError?.validationErrors) {
-            setFieldErrors(apiError.validationErrors);
-        } else {
-            setError(apiError?.message || err.message || "Registration failed. try again");
-        }
+      if(status === 409) { //duplicate email
+          setFieldErrors(prev => ({
+              ...prev, email:apiError?.message || "Email already in use. pick another one"
+          })); 
+          setError("");
+      }
+      else if(apiError?.validationErrors) {
+          setFieldErrors(apiError.validationErrors);
+          setError("");
+      } else {
+          setError(apiError?.message || err.message || "Registration failed. try again");
+      }
     }
   };
 
   return(
     <div>
         <h1>Register User</h1> 
-        {success && <div>{success}</div>}
+        {success && <div style={{color: "green",  backgroundColor: "#d4edda", padding: "10px", borderRadius: "5px"}}>
+            {success}</div>} 
         {error && <div>{error}</div>}
         
         <form onSubmit={handleSubmit}>

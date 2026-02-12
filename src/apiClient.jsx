@@ -1,4 +1,4 @@
-import axios from "axios"; 
+import axios from "axios";  
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v2", 
@@ -36,13 +36,11 @@ apiClient.interceptors.response.use(
 export const userInfo = () => {
   return apiClient.get("/auth/me");
 }
-export const getUsers = (pageNo, pageSize) => {
-  return apiClient.get("/auth/users", {
-    params: {pageNo, pageSize}
-  });
+
+export const register = (firstName, lastName, accountUsername, balance, email, password) => {
+  return apiClient.post(`/auth/register`, 
+  {firstName, lastName, accountUsername, balance, email, password}); 
 }
-
-
 
 
 
@@ -69,7 +67,7 @@ export const transfer = ( toIban, amount) => {
 
 
 export const getLoans = (pageNo, pageSize) => {
-  return apiClient.get(`/auth/me/loans`, { 
+  return apiClient.get(`/loans/account`, { 
   params: { pageNo, pageSize }});
 }
 export const getLoanInfo = (loanId) => {
@@ -99,7 +97,7 @@ export const ddUpdate = (id, amount) => {
   return apiClient.patch(`/dd/update/${id}`, { amount});
 }
 export const getDirectDebits = (pageNo, pageSize) => {
-  return apiClient.get(`/dd/get`, {
+  return apiClient.get(`/dd`, {
     params: { pageNo, pageSize}
   });
 }
@@ -117,23 +115,53 @@ export const getTransactions = (pageNo, pageSize) => {
 }
 
 
+
 //admin
 export const getAdminCount = () => {
-  return apiClient.get("/admin/dashboard/stats")
+  return apiClient.get("/admin/stats")
 }
 
 export const getAdminDD = (pageNo, pageSize) => {
-  return apiClient.get("/admin/dashboard/dd", {
+  return apiClient.get("/dd", {
     params : {pageNo, pageSize}
   })
 }
 export const getAdminLoans = (pageNo, pageSize) => {
-  return apiClient.get("/admin/dashboard/loans", {
+  return apiClient.get("/loans", {
     params: {pageNo, pageSize}
   });
 }
 export const getAdminTx = (pageNo, pageSize) => {
-  return apiClient.get("/admin/dashboard/tx", {
+  return apiClient.get("/transactions/tx", {
+    params: {pageNo, pageSize}
+  });
+}
+export const getActiveDds = (pageNo, pageSize) => {
+  return apiClient.get("/dd/activedd", {
+    params: {pageNo, pageSize}
+  });
+}
+export const registerAdmin = (firstName, lastName, email, password) => {
+  return apiClient.post("/auth/create-admin", {
+    firstName, lastName, email, password
+  });
+}
+
+export const getAdmins = (pageNo, pageSize) => {
+  return apiClient.get("/auth/admins", {
+    params: {pageNo, pageSize}
+  });
+}
+
+export const deactivateUser = (id) => {
+  return apiClient.patch(`/auth/deactivate/${id}`);
+}
+
+export const reactivateUser = (id) => {
+  return apiClient.patch(`/auth/reactivate/${id}`);
+}
+export const getUsers = (pageNo, pageSize) => {
+  return apiClient.get("/auth/users", {
     params: {pageNo, pageSize}
   });
 }

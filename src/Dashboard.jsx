@@ -64,11 +64,6 @@ function Dashboard() {
             link="/dd"
             buttonText="View / Update Amount / Cancel"
         />
-         <ActionCard
-            title="Logout"
-            link="/logout"
-            buttonText="Logout??"
-        />
 
         <section style={{ marginTop: 20 }}>
             <h3>Recent transactions:</h3>

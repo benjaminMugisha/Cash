@@ -24,7 +24,10 @@ function Login() {
   }, []);
 
   const handleChanges = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    setCredentials({ 
+      ...credentials,
+       [e.target.name]: e.target.value
+       });
   };
 
   const handleLogin = async (e) => {
@@ -42,6 +45,7 @@ function Login() {
     } catch (error) {
       const errorMessage = error.response?.data.message;
       setError(errorMessage);
+      //todo: 5 or 10 secs reset.
     }
   };
 
