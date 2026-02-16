@@ -7,7 +7,7 @@ function Register() {
   const[user, setUser] = useState({
     firstName: '',
     lastName: '',
-    accountUsername: '',
+    // accountUsername: '',
     balance: '',
     email: '',
     password: ''
@@ -75,10 +75,10 @@ function Register() {
             onChange={handleChanges} required/> <br />
             {fieldErrors.lastName && <p style={{color: "red"}}>{fieldErrors.lastName}</p> }
 
-            <label htmlFor="accountUsername">your account username</label> 
+            {/* <label htmlFor="accountUsername">your account username</label> 
             <input id="accountUsername" type="text" placeholder="Enter your unique username" name="accountUsername" value={user.accountUsername} 
             onChange={handleChanges} required/> <br />
-            {fieldErrors.accountUsername && <p style={{color: "red"}}>{fieldErrors.accountUsername}</p>}
+            {fieldErrors.accountUsername && <p style={{color: "red"}}>{fieldErrors.accountUsername}</p>} */}
 
             <label htmlFor="balance">Balance</label> 
             <input id="balance" type="number" placeholder="Balance" name="balance" value={user.balance}

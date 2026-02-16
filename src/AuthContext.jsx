@@ -14,7 +14,7 @@ function authReducer(state, action) {
   switch(action.type){
     case "LOGIN":
       return {
-        ...state, token: action.payload 
+        ...state, token: action.payload
     };
     case "SET_USER":
          return {
@@ -22,7 +22,10 @@ function authReducer(state, action) {
     };
     case "LOGOUT": 
       return { 
-        ...initialState 
+        token: localStorage.getItem("token") || null, 
+        user: null,
+        loading: false, 
+        sessionMessage: ""
     }; 
     case "SET_SESSION_MESSAGE" :
       return {

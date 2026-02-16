@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"; 
 import {  getLoans, repayCustom, repayFullLoan } from "./apiClient"; 
-import { AuthContext } from "./AuthContext"; 
+import { AuthContext } from "./AuthContext";  
+import { Link } from "react-router-dom";
 
 function Loans() {
   const {refreshUser} = useContext(AuthContext);
@@ -17,7 +18,7 @@ function Loans() {
     fetchLoans(pageNo); 
   }, [pageNo]);
 
-  const fetchLoans = async (pageNo, pageSize) => {
+  const fetchLoans = async (pageNo) => {
 
     setLoading(true); 
     try {
@@ -81,9 +82,16 @@ function Loans() {
 
   return (
     <div>
-      <h2>your loans:</h2>
       <h3>{success}</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <div style={{marginBottom: 20, marginTop: 20}}>
+        <Link to="/loans/apply" >
+          <button>Apply for a loan</button>
+        </Link>
+      </div>
+
+      <h2>your loans:</h2>
 
       {loading ? (<p>Loading .... </p>)
       : loans.length === 0 ? ( <p>No loans found</p>) :(

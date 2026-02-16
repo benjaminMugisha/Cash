@@ -50,7 +50,6 @@ function AdminLoans() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Owner</th>
               <th>Principal €</th>
               <th>remaining amount</th>
@@ -63,7 +62,6 @@ function AdminLoans() {
           <tbody>
             {loans.map((loans) => (
               <tr key={loans.loanId}>
-                <td>{loans.loanId}</td>
                 <td>{loans.loanOwner}</td>
                 <td>{loans.principal}</td>
                 <td>{loans.remainingBalance}</td>

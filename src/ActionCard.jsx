@@ -12,10 +12,13 @@ function ActionCard({ title, count, link, buttonText, showWhenZero=false}) {
             </h3>
         )}
 
+        {!shouldShowTitle && count === 0 && (
+            <h3>No {title}</h3>
+        )}
+
         <Link to={link}>
             <button>{buttonText}</button>
         </Link>
-
 
     </div>
    )

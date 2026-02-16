@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"; 
 import { cancelDD, ddUpdate, getDirectDebits } from "./apiClient"; 
 import { AuthContext } from "./AuthContext";
+import { Link } from "react-router-dom";
 
 function DirectDebits() {
   const {refreshUser, loading} = useContext(AuthContext);
@@ -67,13 +68,12 @@ function DirectDebits() {
 
     try { 
       const res = await ddUpdate(id, editAmounts[id]);
-      console.log(res.data.status);
       const status = res.data.status;
 
       if(status === "CANCELLED") {
         setMessage(`Direct Debit to ${res.data.dto.toAccountUsername} cancelled. `)
       } else if (status === "UNCHANGED") {
-        setMessage(`Direct debit ${res.data.dto.amount} unchanged`)
+        setMessage(`Direct debit of ${res.data.dto.amount} unchanged`)
       } else if( status === "UPDATED") {
       setMessage(`Direct debit to ${res.data.dto.toAccountUsername} updated from ${originalAmount}€ to ${res.data.dto.amount}€ per month`);
       refreshUser();
@@ -89,6 +89,11 @@ function DirectDebits() {
 
   return (
     <div>
+      <div style={{marginBottom: 20, marginTop: 20}}>
+        <Link to="/direct-debits/create" >
+          <button>Create a direct debit</button>
+        </Link>
+      </div>
       <h2> Your Direct Debits </h2>
       <h3>{message}</h3> 
 

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { getTransactions } from "./apiClient";
+import { getUserTransactions } from "./apiClient";
 import { AuthContext } from "./AuthContext";
 
 function TransactionHistory() {
@@ -16,13 +16,14 @@ function TransactionHistory() {
 
   const fetchTransactions = async (pageNo) => {
     try {
-      const res = await getTransactions(pageNo, pageSize);
+      const res = await getUserTransactions(pageNo, pageSize);
       setTransactions(res.data.content);
       setPageNo(res.data.pageNo);
       setTotalPages(res.data.totalPages);
     } 
     catch (err) {
-      setError(err.response?.data?.message || "Failed to load transactions");
+      // setError(err.response?.data?.message || "Failed to load transactions");
+      setError(err.response?.data?.message);
     } 
   };
 
@@ -58,8 +59,9 @@ function TransactionHistory() {
             <tr key={tx.transactionId}>
               <td>{tx.type}</td>
               <td>{tx.amount}</td>
-              <td>{new Date(tx.timestamp).toLocaleString()}</td>
-              <td>{tx.toAccountUsername || "-"}</td>
+
+              <td>{tx.timeStamp}</td>
+              <td>{tx.toEmail || "-"}</td>
             </tr>
           ))}
         </tbody>
@@ -67,7 +69,10 @@ function TransactionHistory() {
       )}
       <div style={{ marginTop: 20 }}>
         <button onClick={handlePrev} disabled={pageNo === 0}> Previous </button>
-        <span style={{ margni: "0 10 px "}}> Page {pageNo + 1} of {totalPages}</span>
+        <span style={{ margin: "0 10 px "}}>
+          {totalPages === 0 ? "No pages" : `Page ${pageNo + 1} of ${totalPages}` }
+          </span>
+           
         <button onClick={handleNext} disabled={pageNo + 1 === totalPages}> next </button>
       </div> 
     </div>

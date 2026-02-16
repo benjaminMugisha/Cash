@@ -50,8 +50,7 @@ function AdminTransactions() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
-              <th> owner €</th>
+              <th> owner</th>
               <th>TYPE</th>
               <th>amount</th>
               <th>time</th>
@@ -62,12 +61,11 @@ function AdminTransactions() {
           <tbody>
             {tx.map((tx) => (
               <tr key={tx.transactionId}>
-                <td>{tx.transactionId}</td>
-                <td>{tx.accountUsername}</td>
+                <td>{tx.email}</td>
                 <td>{tx.type}</td>
                 <td>{tx.amount}</td>
                 <td>{tx.timeStamp}</td>
-                <td>{tx.toAccountUsername}</td>
+                <td>{tx.toEmail}</td>
               </tr>
             ))}
           </tbody>
@@ -78,8 +76,8 @@ function AdminTransactions() {
         <button onClick={handlePrev} disabled={pageNo === 0}>
           Previous
         </button>
-        <span style={{ margin : "0 10px" }}> 
-          Page {pageNo + 1} of {totalPages} 
+        <span style={{ margin: "0 10 px "}}>
+          {totalPages === 0 ? "No pages" : `Page ${pageNo + 1} of ${totalPages}` }
         </span>
         <button onClick={handleNext} disabled={pageNo + 1 === totalPages}>
           Next

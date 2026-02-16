@@ -24,8 +24,7 @@ function DirectDebitCreate() {
       console.log(res.data.dto.toAccountUsername);
 
       if(res.data.status === "CREATED_AND_PAID") 
-        setSuccess(`direct debit creation to ${res.data.dto.toAccountUsername} of €${res.data.dto.amount}.
-       next payment date is: ${res.data.dto.nextPaymentDate}`);
+      setSuccess(`direct debit createc to ${res.data.dto.toAccountUsername} of €${res.data.dto.amount}.`);
       setSuccessData(res.data.dto);
 
       setToIban("");
@@ -33,7 +32,8 @@ function DirectDebitCreate() {
       setError("");
       refreshUser();
 
-      setTimeout(() => setSuccessData(null), 15000);
+      setTimeout(() => setSuccessData(null), 5000);
+      setTimeout(() => setSuccess(null), 5000);
     } catch (err) {
       setError(
         err.response?.data?.message ||

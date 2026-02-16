@@ -51,7 +51,6 @@ function AdminDDs() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
               <th>from username</th>
               <th>to username</th>
               <th>amount</th>
@@ -63,12 +62,11 @@ function AdminDDs() {
           <tbody>
             {dd.map((dd) => (
               <tr key={dd.id}>
-                <td>{dd.id}</td>
                 <td>{dd.fromAccountUsername}</td>
                 <td>{dd.toAccountUsername}</td>
                 <td>{dd.amount.toFixed(2)}</td>
                 <td>{dd.nextPaymentDate}</td>
-                <td>{dd.active ? "Yes" : "No" }</td>
+                <td style={dd.active ? {color: "green"} : {color:"red"}}>{dd.active ? "Active" : "Inactive" }</td>
               </tr>
             ))}
           </tbody>

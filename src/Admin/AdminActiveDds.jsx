@@ -51,7 +51,6 @@ function AdminActiveDds() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
               <th>from username</th>
               <th>to username</th>
               <th>amount</th>
@@ -62,7 +61,6 @@ function AdminActiveDds() {
           <tbody>
             {dd.map((dd) => (
               <tr key={dd.id}>
-                <td>{dd.id}</td>
                 <td>{dd.fromAccountUsername}</td>
                 <td>{dd.toAccountUsername}</td>
                 <td>{dd.amount.toFixed(2)}</td>

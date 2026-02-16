@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios"; 
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import { loginEndpoint } from "./apiClient";
 
 function Login() {
   const { login } = useContext(AuthContext); 
@@ -9,7 +10,7 @@ function Login() {
 
   const [credentials, setCredentials] = useState({
     email: "",
-    password: "",
+    password: ""
   });
   const { sessionMessage, setSessionMessage } = useContext(AuthContext);
   const [error, setError] = useState("");
@@ -35,15 +36,17 @@ function Login() {
     setError("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v2/auth/login", credentials);
+      // const response = await loginEndpoint(credentials.email, credentials.password); 
+      const response =  await axios.post( "http://localhost:8080/api/v2/auth/login", credentials);
 
+      console.log(response);
       const { token } = response.data;
       login(token); 
       navigate("/");
 
     } catch (error) {
       const errorMessage = error.response?.data.message;
+      console.log(errorMessage);
       setError(errorMessage);
       //todo: 5 or 10 secs reset.
     }

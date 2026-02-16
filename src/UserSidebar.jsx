@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function Sidebar({ menu }) {
+function UserSidebar({ menu }) {
   const [openSection, setOpenSection] = useState(null);
-  const location = useLocation();
 
   const toggleSection = (title) => {
     setOpenSection(prev => (prev === title ? null : title));
   };
-
-  const isActive = (path) => location.pathname === path;
 
   return (
     <aside style={{
@@ -22,8 +19,7 @@ function Sidebar({ menu }) {
           <button
             onClick={() => toggleSection(section.title)}
             style={{  width: "100%",textAlign: "left",padding: "10px",
-              background: "#f5f5f5",border: "none",cursor: "pointer",fontWeight: "bold" }} 
-          >
+              background: "#f5f5f5",border: "none",cursor: "pointer",fontWeight: "bold" }} >
             {section.title}
           </button>
 
@@ -31,14 +27,7 @@ function Sidebar({ menu }) {
             <ul style={{ listStyle: "none", paddingLeft: "15px" }}>
               {section.items.map(item => (
                 <li key={item.path}>
-                  <Link to={item.path}
-                  style={{display: "block", padding:"6px 0", 
-                color: isActive(item.path) ? "blue" : "black", 
-              fontWeight: isActive(item.path) ? "bold" : "normal"
-            }}
-                >
-                  {item.label}
-                  </Link>
+                  <Link to={item.path}>{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -49,4 +38,4 @@ function Sidebar({ menu }) {
   );
 }
 
-export default Sidebar;
+export default UserSidebar;

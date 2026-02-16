@@ -1,4 +1,4 @@
-import axios from "axios";  
+import axios from "axios";   
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api/v2", 
@@ -32,17 +32,19 @@ apiClient.interceptors.response.use(
   }
 ) 
 
-
-export const userInfo = () => {
-  return apiClient.get("/auth/me");
+export const loginEndpoint = () => {
+  return apiClient.post(`/auth/login`, {
+    email, password
+  })
 }
-
 export const register = (firstName, lastName, accountUsername, balance, email, password) => {
   return apiClient.post(`/auth/register`, 
   {firstName, lastName, accountUsername, balance, email, password}); 
 }
 
-
+export const userInfo = () => {
+  return apiClient.get("/auth/me");
+}
 
 
 export const getAccounts = (pageNo, pageSize) =>{
@@ -89,7 +91,7 @@ export const applyForLoan = (income, principal, monthsToRepay) => {
 
 
 export const ddCreate = (toIban, amount) => {
-  return apiClient.post("/dd/create", {
+  return apiClient.post(`/dd/create`, {
     toIban, amount
   })
 }
@@ -97,22 +99,33 @@ export const ddUpdate = (id, amount) => {
   return apiClient.patch(`/dd/update/${id}`, { amount});
 }
 export const getDirectDebits = (pageNo, pageSize) => {
-  return apiClient.get(`/dd`, {
+  return apiClient.get(`/dd/all`, {
     params: { pageNo, pageSize}
   });
 }
 export const cancelDD = (loanId) => {
   return apiClient.patch(`dd/cancel/${loanId}`);
 }
+export const getAllDds = (pageNo, pageSize) => {
+  return apiClient.get(`/dd/dd`, {
+    params: { pageNo, pageSize}
+  });
+}
 
 
 
 
 export const getTransactions = (pageNo, pageSize) => {
+  return apiClient.get("/transactions/tx", {
+    params : { pageNo, pageSize }
+  })
+}
+export const getUserTransactions = (pageNo, pageSize) => {
   return apiClient.get("/transactions", {
     params : { pageNo, pageSize }
   })
 }
+
 
 
 
@@ -122,7 +135,7 @@ export const getAdminCount = () => {
 }
 
 export const getAdminDD = (pageNo, pageSize) => {
-  return apiClient.get("/dd", {
+  return apiClient.get("/dd/dd", {
     params : {pageNo, pageSize}
   })
 }
@@ -140,7 +153,7 @@ export const getActiveDds = (pageNo, pageSize) => {
   return apiClient.get("/dd/activedd", {
     params: {pageNo, pageSize}
   });
-}
+} 
 export const registerAdmin = (firstName, lastName, email, password) => {
   return apiClient.post("/auth/create-admin", {
     firstName, lastName, email, password
@@ -151,6 +164,12 @@ export const getAdmins = (pageNo, pageSize) => {
   return apiClient.get("/auth/admins", {
     params: {pageNo, pageSize}
   });
+}
+
+export const getInactiveUsers = (pageNo, pageSize) => {
+  return apiClient.get(`/auth/inactive`, {
+    params: {pageNo, pageSize}
+  })
 }
 
 export const deactivateUser = (id) => {

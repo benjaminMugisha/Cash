@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'; 
-import { getDirectDebits, getLoans, getTransactions, userInfo } from './apiClient';
+import { getDirectDebits, getLoans, getTransactions, getUserTransactions, userInfo } from './apiClient';
 import { AuthContext } from './AuthContext';
 import {Link} from "react-router-dom";
 import ActionCard from './ActionCard';
@@ -20,11 +20,12 @@ function Dashboard() {
                 setloading(true);
 
                 const [ loanRes, ddRes, txRes] = await Promise.all([
-                    getLoans(), getDirectDebits(), getTransactions(0, 3) 
+                    getLoans(), getDirectDebits(), getUserTransactions(0, 3) 
                 ])
                 setLoansCount(loanRes.data.totalElements || 0);
                 setddCount((ddRes.data.totalElements) || 0);
                 setRecentT(txRes.data.content ?? []);
+                // setRecentT(txRes.data.content);
 
             } catch (err) {
                 setError("failed to load dashboard"); 
@@ -41,7 +42,7 @@ function Dashboard() {
 
   return (
     <div>
-        <h1>Welcome {user?.firstName || user?.accountUsername}</h1>
+        <h1>Welcome {user?.firstname || user?.accountUsername}</h1>
 
         <ActionCard
             title="is your account Balance"
@@ -55,14 +56,14 @@ function Dashboard() {
             title="Active Loans"
             count={loansCount}
             link="/loans"
-            buttonText="View / Repay / Apply"
+            buttonText="Go To loans"
         />
 
         <ActionCard
             title="Active Direct Debits"
             count={ddCount}
-            link="/dd"
-            buttonText="View / Update Amount / Cancel"
+            link="/direct-debits"
+            buttonText="Go to Direct Debits"
         />
 
         <section style={{ marginTop: 20 }}>
@@ -74,14 +75,14 @@ function Dashboard() {
                     {recentT.map((tx) => (
                         <li key={tx.transactionId}>
                             {tx.type} - €{tx.amount} - Date: &nbsp;
-                            { new Date(Date.parse(tx.timestamp)).toLocaleString()}
+                            { new Date(Date.parse(tx.timeStamp)).toLocaleString()}
                         </li>
                     ))}
                 </ul>
             )} 
-            <Link to="/transactions">
+            {recentT.length > 0 && <Link to="/transactions">
             <button>👉 click to view Your transactions</button>
-            </Link>
+            </Link>  }
         </section>
 
     </div>

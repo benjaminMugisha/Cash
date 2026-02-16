@@ -53,7 +53,6 @@ function Admins() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
               <th>email</th>
               <th>first name</th>
               <th>last name</th>
@@ -65,8 +64,6 @@ function Admins() {
           <tbody>
             {admins.map((admins) => (
               <tr key={admins.id}>
-
-                <td>{admins.id}</td>
                 <td>{admins.email}</td>
                 <td>{admins.firstname}</td>
                 <td>{admins.lastname}</td>

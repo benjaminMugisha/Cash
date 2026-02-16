@@ -9,7 +9,6 @@ function Accounts() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   const fetchAccounts = async (page) => {
     setLoading(true);
     setError("");
@@ -51,8 +50,7 @@ function Accounts() {
         <table border="1">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Username</th>
+              <th>Email</th>
               <th>Balance</th>
             </tr>
           </thead>
@@ -60,8 +58,7 @@ function Accounts() {
           <tbody>
             {accounts.map((acc) => (
               <tr key={acc.id}>
-                <td>{acc.id}</td>
-                <td>{acc.accountUsername}</td>
+                <td>{acc.email}</td>
                 <td>{acc.balance.toFixed(2)}</td>
               </tr>
             ))}

@@ -24,6 +24,8 @@ import AdminTransactions from './Admin/AdminTransactions'
 import AdminActiveDds from './Admin/AdminActiveDds'
 import AdminCreate from './Admin/AdminCreate'
 import Admins from './Admin/Admins'
+import InactiveUsers from './Admin/InactiveUsers'
+import AppLayout from './AppLayout'
 
 
 function App() {
@@ -36,9 +38,10 @@ function App() {
         <Route path='/register' element={ <Register />} />
         <Route path='/login' element={<Login />} />
       </Route>
-      {/* <Route path='/logout' element={<Logout />}/> */}
+      {/* <Route path='/logout' element={<Logout />}/> */} 
 
       <Route element={<ProtectedRoute />}> 
+        <Route element={<AppLayout />} >
 
         <Route path="/dashboard" element={<Dashboard />}/>
         <Route path='/' element={ <UserProfile /> } />
@@ -49,23 +52,27 @@ function App() {
         <Route path='/transfer' element={ <Transfer /> } />
 
         <Route path='/loans' element={  <Loans /> } />
-        <Route path='/loans-apply' element={  < LoanApplicationForm /> } />
+        <Route path='/loans/apply' element={  < LoanApplicationForm /> } />
 
-        <Route path='/dd' element={ < DirectDebits /> }/>
-        <Route path='/dd-create' element={ < DirectDebitCreate /> }/>
-      </Route> 
+        <Route path='/direct-debits' element={ < DirectDebits /> }/>
+        <Route path='/direct-debits/create' element={ < DirectDebitCreate /> }/>
+       
+        </ Route >
 
+          {/* ADMIN ROUTES */}
       <Route path="/admin" element={ <AdminDashboard /> }>
         <Route index element={<AdminHome />} />
         <Route path="accounts" element={<Accounts />}/>
         <Route path="users" element={<Users />} />
         <Route path="activedds" element={<AdminActiveDds />} />
-        <Route path="dd" element={< AdminDDs />}/>
+        <Route path="direct-debits" element={< AdminDDs />}/>
         <Route path="loans" element={ <AdminLoans />} />
         <Route path="tx" element={<AdminTransactions />} />
         <Route path="create-admin" element={<AdminCreate />}/>
         <Route path="admins" element={<Admins />}/>
+        <Route path="inactive" element={<InactiveUsers />}/>
       </Route>
+      </Route> 
 
       <Route path="*" element={<h1>404. Page Not Found</h1>} />
 
