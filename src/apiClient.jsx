@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api/v2", 
+  baseURL: "https://bankingapp-production-8d32.up.railway.app/api/v2",
 });
+//import.meta.env.VITE_API_URL || "http://localhost:8080/api/v2"
 export default apiClient;
 
 apiClient.interceptors.request.use( (config) => {
@@ -32,7 +33,7 @@ apiClient.interceptors.response.use(
   }
 ) 
 
-export const loginEndpoint = () => {
+export const loginEndpoint = (email,password) => {
   return apiClient.post(`/auth/login`, {
     email, password
   })

@@ -36,8 +36,8 @@ function Login() {
     setError("");
 
     try {
-      // const response = await loginEndpoint(credentials.email, credentials.password); 
-      const response =  await axios.post( "http://localhost:8080/api/v2/auth/login", credentials);
+      const response = await loginEndpoint(credentials.email, credentials.password); 
+      // const response =  await axios.post( "http://localhost:8080/api/v2/auth/login", credentials);
 
       console.log(response);
       const { token } = response.data;
