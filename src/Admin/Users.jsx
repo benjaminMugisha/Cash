@@ -44,7 +44,7 @@ function Users() {
   const handleDeactivate = async (userId) => {
     try {
     const response = await deactivateUser(userId);
-    setDSuccess(`❌❌❌  **${response.data.email}** account has been Disabled.`);
+    setDSuccess(`**${response.data.email}** account has been Disabled.`);
     fetchUsers();
     setTimeout(() => setDSuccess(""), 3000);
   } catch(err) {

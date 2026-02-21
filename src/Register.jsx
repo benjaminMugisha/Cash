@@ -7,7 +7,6 @@ function Register() {
   const[user, setUser] = useState({
     firstName: '',
     lastName: '',
-    // accountUsername: '',
     balance: '',
     email: '',
     password: ''

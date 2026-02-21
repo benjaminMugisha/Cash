@@ -13,10 +13,6 @@ function DirectDebits() {
   const [message, setMessage] = useState("");
   const [editAmounts, setEditAmounts] = useState({});
 
-  useEffect(() => {
-    fetchDebits(pageNo);
-  }, [pageNo]);
-
   const fetchDebits = async (pageNo) => {
     setError("");
     try {
@@ -34,6 +30,11 @@ function DirectDebits() {
       setError("Failed to load direct debits");
     }
   };
+
+  useEffect(() => {
+    fetchDebits(pageNo);
+  }, [pageNo]);
+
 
   const handlePrev = () => { 
     if (pageNo > 0) setPageNo(pageNo - 1); 
@@ -94,7 +95,6 @@ function DirectDebits() {
           <button>Create a direct debit</button>
         </Link>
       </div>
-      <h2> Your Direct Debits </h2>
       <h3>{message}</h3> 
 
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -102,6 +102,9 @@ function DirectDebits() {
       ) : debits.length === 0 ? (
         <p>No direct debits found.</p>
       ) : (
+        <>
+      <h2> Your Direct Debits </h2>
+
         <table border="1">
           <thead>
             <tr> 
@@ -148,6 +151,7 @@ function DirectDebits() {
             ))}
           </tbody>
         </table>
+        </>
       )}
 
       <div style={{ marginTop: 20 }}>

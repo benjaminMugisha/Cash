@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function Sidebar({ menu }) {
+function Sidebar({ menu, menuLabel }) {
   const [openSection, setOpenSection] = useState(null);
   const location = useLocation();
 
@@ -13,10 +13,14 @@ function Sidebar({ menu }) {
 
   return (
     <aside style={{
-      width: "240px",
-      borderRight: "1px solid #ddd",
+      width: "240px",borderRight: "1px solid #ddd",
       padding: "10px"
     }}>
+      {menuLabel && (
+      <div style={{padding:"10px", color:"#888"}}>
+        {menuLabel}
+      </div>
+      )} 
       {menu.map(section => (
         <div key={section.title}>
           <button

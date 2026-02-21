@@ -21,7 +21,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="nav-left">
         <Link to="/" className="nav-logo">
-          MyBank
+          Home 🏠
         </Link>
       </div>
       <div className="nav-links">

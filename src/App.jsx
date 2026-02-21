@@ -26,7 +26,9 @@ import AdminCreate from './Admin/AdminCreate'
 import Admins from './Admin/Admins'
 import InactiveUsers from './Admin/InactiveUsers'
 import AppLayout from './AppLayout'
-
+import AdminTransactionSearch from './Admin/TransactionsSearch'
+import SearchLoans from './Admin/SearchLoans'
+import DirectDebitSearch from './Admin/DirectDebitSearch'
 
 function App() {
 
@@ -38,7 +40,6 @@ function App() {
         <Route path='/register' element={ <Register />} />
         <Route path='/login' element={<Login />} />
       </Route>
-      {/* <Route path='/logout' element={<Logout />}/> */} 
 
       <Route element={<ProtectedRoute />}> 
         <Route element={<AppLayout />} >
@@ -64,10 +65,15 @@ function App() {
         <Route index element={<AdminHome />} />
         <Route path="accounts" element={<Accounts />}/>
         <Route path="users" element={<Users />} />
+
         <Route path="activedds" element={<AdminActiveDds />} />
         <Route path="direct-debits" element={< AdminDDs />}/>
+        <Route path="direct-debits/search" element={<DirectDebitSearch />}/>
+
         <Route path="loans" element={ <AdminLoans />} />
+        <Route path="loans/search" element={ <SearchLoans />} />
         <Route path="tx" element={<AdminTransactions />} />
+        <Route path="tx/search" element={<AdminTransactionSearch />} />
         <Route path="create-admin" element={<AdminCreate />}/>
         <Route path="admins" element={<Admins />}/>
         <Route path="inactive" element={<InactiveUsers />}/>

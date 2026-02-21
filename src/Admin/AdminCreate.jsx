@@ -5,6 +5,7 @@ function AdminCreate() {
     const[user, setUser] = useState({
         firstName: '',
         lastName: '',
+        balance: 0,
         email: '',
         password: ''
       });
@@ -25,9 +26,9 @@ function AdminCreate() {
         
         try {
             const res = await registerAdmin(user.firstName, user.lastName, 
-                user.email, user.password);
-            console.log(res);
+                user.balance, user.email, user.password);
             setSuccess(res.data);
+            setError("");
 
         } catch (err) {
             const apiError = err.response?.data;
@@ -64,6 +65,11 @@ function AdminCreate() {
             <input id="lastName" type="text" placeholder="Enter last name" name="lastName" value={user.lastName}
             onChange={handleChanges} required/> <br />
             {fieldErrors.lastName && <p style={{color: "red"}}>{fieldErrors.lastName}</p> }
+
+            <label htmlFor="balance">Balance</label> 
+            <input id="balance" type="number" placeholder="Enter starting balance" name="balance" value={user.balance}
+            onChange={handleChanges} required/> <br />
+            {fieldErrors.balance && <p style={{color: "red"}}>{fieldErrors.balance}</p> }
 
             <label htmlFor="email">Email</label>
             <input id="email" type="email" placeholder="Enter email" name="email" value={user.email}

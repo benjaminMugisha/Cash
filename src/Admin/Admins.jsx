@@ -56,7 +56,6 @@ function Admins() {
               <th>email</th>
               <th>first name</th>
               <th>last name</th>
-              {/* <th>Username</th> */}
               
             </tr>
           </thead>

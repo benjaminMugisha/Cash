@@ -13,14 +13,17 @@ function Deposit() {
     if(loading) return <h1>Loading...</h1>
 
     try {
+
       const res = await deposit(parseFloat(amount));
 
       setMessage(res.data.message);
       setAmount("");
       refreshUser();
     } catch (err) {
-      setMessage("❌ Deposit failed");  
-    } 
+      setMessage("❌ Deposit failed"); 
+      setAmount(""); 
+    }
+
   };
 
   return (

@@ -51,6 +51,7 @@ function TransactionHistory() {
             <th>Amount (€)</th>
             <th>Time</th>
             <th>To Account</th>
+            <th>Balance</th>
           </tr>
         </thead>
 
@@ -62,6 +63,7 @@ function TransactionHistory() {
 
               <td>{tx.timeStamp}</td>
               <td>{tx.toEmail || "-"}</td>
+              <td>{tx.balance}</td>
             </tr>
           ))}
         </tbody>

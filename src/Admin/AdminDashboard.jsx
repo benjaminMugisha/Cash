@@ -13,7 +13,7 @@ function AdminDashboard() {
 
     return(
       <div style={{display:"flex", minHeight: "100vh"}}>
-        <Sidebar menu={adminMenu}/>
+        <Sidebar menu={adminMenu} menuLabel="Admin menu"/>
 
         <main style={{padding:"20px", flex:1}}>
           <Outlet />

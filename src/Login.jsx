@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react"; 
-import axios from "axios"; 
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { loginEndpoint } from "./apiClient";
@@ -37,9 +36,6 @@ function Login() {
 
     try {
       const response = await loginEndpoint(credentials.email, credentials.password); 
-      // const response =  await axios.post( "http://localhost:8080/api/v2/auth/login", credentials);
-
-      console.log(response);
       const { token } = response.data;
       login(token); 
       navigate("/");
@@ -48,7 +44,6 @@ function Login() {
       const errorMessage = error.response?.data.message;
       console.log(errorMessage);
       setError(errorMessage);
-      //todo: 5 or 10 secs reset.
     }
   };
 
@@ -72,7 +67,7 @@ function Login() {
         onChange={handleChanges} required />
 
         <br />
-        <button type="submit">Login</button>
+        <button type="submit" style={{color: "green"}}>Login</button>
       </form>
     </div>
   );

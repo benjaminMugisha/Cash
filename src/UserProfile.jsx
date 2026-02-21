@@ -1,9 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function UserProfile() {
   const {user, loading} = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!loading && user?.role === "ADMIN") {
+      navigate("/admin")
+    }
+  })
 
   if(loading) return <h1>Loading....</h1>
   if (!user) return <Navigate to="/login" replace />

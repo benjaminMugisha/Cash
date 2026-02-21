@@ -18,30 +18,33 @@ export const adminMenu = [
       title: "Direct Debits",
       items: [
         { label: "All Direct Debits", path: "/admin/direct-debits" }, 
-        {label: "Active Direct Debits", path:"/admin/activedds"},
+        { label: "Search by user", path:"/admin/direct-debits/search" },
+        { label: "Active Direct Debits", path:"/admin/activedds"},
       ]
     },
     {
         title: "Loans",
         items: [
-          { label: "All Loans", path: "/admin/loans" }
+          { label: "All Loans", path: "/admin/loans" },
+          { label: "Search by user", path: "/admin/loans/search" }
         ]
     },
     {
         title: "Transactions",
         items: [
-          { label: "All Transactions", path: "/admin/tx" }
+          { label: "All Transactions", path: "/admin/tx" },
+          { label: "search by user", path: "/admin/tx/search" }
         ]
     }
   ];
-  
+
   export const userMenu = [
     {
       title: "Account",
       items: [
         { label: "Account details", path: "/dashboard" },
         { label: "Transfer", path: "/transfer" },
-        {label: "Deposit", path:"/deposit"},
+        { label: "Deposit", path:"/deposit" },
         { label: "Withdraw", path: "/withdraw" },
         { label: "Transactions", path: "/transactions" }
       ]
@@ -50,7 +53,7 @@ export const adminMenu = [
       title: "Loans",
       items: [
         { label: "My Loans", path: "/loans" },
-        { label: "Apply", path: "/loans/apply" }
+        { label: "Apply", path: "/loans/apply" },
       ]
     },
     {
@@ -60,5 +63,4 @@ export const adminMenu = [
         { label: "Create a direct debit", path: "/direct-debits/create" },
       ]
     },
-  ];
-  
+];

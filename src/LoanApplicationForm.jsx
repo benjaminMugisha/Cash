@@ -19,6 +19,9 @@ function LoanApplicationForm() {
       const res = await applyForLoan(income, principal, monthsToRepay);
       const { message, loanDto } = res.data;
       refreshUser();
+      setIncome("");
+      setMonthsToRepay("");
+      setPrincipal("");
 
       setLoanData({
         message, 
@@ -26,9 +29,13 @@ function LoanApplicationForm() {
         monthlyPayment: loanDto.amountToPayEachMonth,
         nextPaymentDate: loanDto.nextPaymentDate
       });
-          
+      
+
     } catch (err) {
       setError(err.response?.data?.message || "❌ Loan application failed");
+      setIncome("");
+      setMonthsToRepay("");
+      setPrincipal("");
     }
   }
 

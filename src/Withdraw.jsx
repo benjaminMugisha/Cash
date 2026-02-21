@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'; 
+import React, { useContext, useState } from 'react';
 import { withdraw } from './apiClient'; 
 import { AuthContext } from './AuthContext';
 

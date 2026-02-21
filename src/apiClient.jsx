@@ -1,9 +1,8 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://bankingapp-production-8d32.up.railway.app/api/v2",
+  baseURL: import.meta.env.VITE_API_URL
 });
-//import.meta.env.VITE_API_URL || "http://localhost:8080/api/v2"
 export default apiClient;
 
 apiClient.interceptors.request.use( (config) => {
@@ -48,6 +47,7 @@ export const userInfo = () => {
 }
 
 
+
 export const getAccounts = (pageNo, pageSize) =>{
   return apiClient.get(`/accounts/all`, {
     params: { pageNo, pageSize }});
@@ -67,11 +67,13 @@ export const transfer = ( toIban, amount) => {
 
 
 
-
-
 export const getLoans = (pageNo, pageSize) => {
   return apiClient.get(`/loans/account`, { 
   params: { pageNo, pageSize }});
+}
+export const searchLoans = (email, pageNo, pageSize) => {
+  return apiClient.get(`/loans/account`, { 
+  params: { email, pageNo, pageSize }});
 }
 export const getLoanInfo = (loanId) => {
   return apiClient.get(`/loans/${loanId}`);
@@ -121,6 +123,11 @@ export const getTransactions = (pageNo, pageSize) => {
     params : { pageNo, pageSize }
   })
 }
+export const getTransactionsByEmail = (email, pageNo, pageSize) => {
+  return apiClient.get(`/transactions`, {
+    params : {  email,pageNo, pageSize }
+  })
+}
 export const getUserTransactions = (pageNo, pageSize) => {
   return apiClient.get("/transactions", {
     params : { pageNo, pageSize }
@@ -140,8 +147,13 @@ export const getAdminDD = (pageNo, pageSize) => {
     params : {pageNo, pageSize}
   })
 }
+export const searchDD = (email, pageNo, pageSize) => {
+  return apiClient.get("/dd/all", {
+    params : {email, pageNo, pageSize}
+  })
+}
 export const getAdminLoans = (pageNo, pageSize) => {
-  return apiClient.get("/loans", {
+  return apiClient.get("/loans/", {
     params: {pageNo, pageSize}
   });
 }
@@ -155,9 +167,9 @@ export const getActiveDds = (pageNo, pageSize) => {
     params: {pageNo, pageSize}
   });
 } 
-export const registerAdmin = (firstName, lastName, email, password) => {
+export const registerAdmin = (firstName, lastName, balance, email, password) => {
   return apiClient.post("/auth/create-admin", {
-    firstName, lastName, email, password
+    firstName, lastName, balance, email, password
   });
 }
 

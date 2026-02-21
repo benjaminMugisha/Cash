@@ -36,8 +36,7 @@ function DirectDebitCreate() {
       setTimeout(() => setSuccess(null), 5000);
     } catch (err) {
       setError(
-        err.response?.data?.message ||
-        "❌ Failed to create direct debit"
+        err.response?.data?.message || "❌ Failed to create direct debit"
       );
     } finally {
       setError("");
