@@ -92,7 +92,7 @@ function Loans() {
       </div>
 
       {loading ? (<p>Loading .... </p>)
-      : loans.length === 0 ? ( <p>No loans found</p>) :(
+      : loans.length === 0 ? ( <p>You have no Loans.</p>) :(
         <>
         <h1>your Loans</h1>
         <table border="2">

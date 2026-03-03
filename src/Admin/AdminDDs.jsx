@@ -66,6 +66,7 @@ function AdminDDs() {
                 <td>{dd.toAccountUsername}</td>
                 <td>{dd.amount.toFixed(2)}</td>
                 <td>{dd.nextPaymentDate}</td>
+                {/* <td>{new Date(dd.nextPaymentDate).toLocaleString()}</td> */}
                 <td style={dd.active ? {color: "green"} : {color:"red"}}>{dd.active ? "Active" : "Inactive" }</td>
               </tr>
             ))}

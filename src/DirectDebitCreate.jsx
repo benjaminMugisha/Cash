@@ -24,7 +24,7 @@ function DirectDebitCreate() {
       console.log(res.data.dto.toAccountUsername);
 
       if(res.data.status === "CREATED_AND_PAID") 
-      setSuccess(`direct debit createc to ${res.data.dto.toAccountUsername} of €${res.data.dto.amount}.`);
+      setSuccess(`direct debit of €${res.data.dto.amount} to ${res.data.dto.toAccountUsername} created`);
       setSuccessData(res.data.dto);
 
       setToIban("");

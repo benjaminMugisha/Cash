@@ -60,8 +60,7 @@ function TransactionHistory() {
             <tr key={tx.transactionId}>
               <td>{tx.type}</td>
               <td>{tx.amount}</td>
-
-              <td>{tx.timeStamp}</td>
+              <td>{new Date(tx.timeStamp).toLocaleString()}</td>
               <td>{tx.toEmail || "-"}</td>
               <td>{tx.balance}</td>
             </tr>

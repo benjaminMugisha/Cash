@@ -92,7 +92,7 @@ function DirectDebitSearch() {
                 <td>{dd.fromAccountUsername}</td>
                 <td>{dd.toAccountUsername}</td>
                 <td>{dd.amount}</td>
-                <td>{dd.nextPaymentDate}</td> 
+                <td>{new Date(dd.nextPaymentDate).toLocaleString()}</td>
                 <td style={dd.active ? {color: "green"} : {color:"red"}}>{dd.active ? "Active" : "Inactive" }</td>
               </tr>
             ))}

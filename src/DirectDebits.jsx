@@ -100,7 +100,7 @@ function DirectDebits() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {loading ? ( <p>Loading...</p> 
       ) : debits.length === 0 ? (
-        <p>No direct debits found.</p>
+        <p>You have no direct debits.</p>
       ) : (
         <>
       <h2> Your Direct Debits </h2>

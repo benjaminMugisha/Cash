@@ -66,7 +66,7 @@ function AdminTransactions() {
                 <td>{tx.type}</td>
                 <td>{tx.amount}</td>
                 <td>{tx.balance}</td>
-                <td>{tx.timeStamp}</td>
+                <td>{new Date(tx.timeStamp).toLocaleString()}</td>
                 <td>{tx.toEmail || "-"}</td>
               </tr>
             ))}

@@ -90,7 +90,7 @@ function SearchLoans() {
               <tr key={loans.loanId}>
                 <td>{loans.principal}</td>
                 <td>{loans.remainingBalance}</td>
-                <td>{loans.startDate}</td>
+                <td>{new Date(loans.startDate).toLocaleString()}</td>
                 <td>{loans.nextPaymentDate}</td>
                 <td style={loans.active ? {color: "green"} : {color:"red"}}>
                   {loans.active ? "Active" : "Inactive"}

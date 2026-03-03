@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginEndpoint } from "./apiClient";
 
 function Login() {
-  const { login } = useContext(AuthContext); 
+  const { login, logout } = useContext(AuthContext); 
   const navigate = useNavigate(); 
 
   const [credentials, setCredentials] = useState({
@@ -35,6 +35,7 @@ function Login() {
     setError("");
 
     try {
+      logout();
       const response = await loginEndpoint(credentials.email, credentials.password); 
       const { token } = response.data;
       login(token); 
@@ -42,7 +43,7 @@ function Login() {
 
     } catch (error) {
       const errorMessage = error.response?.data.message;
-      console.log(errorMessage);
+      console.log(error);
       setError(errorMessage);
     }
   };

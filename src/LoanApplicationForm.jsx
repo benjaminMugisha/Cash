@@ -32,37 +32,35 @@ function LoanApplicationForm() {
       
 
     } catch (err) {
-      setError(err.response?.data?.message || "❌ Loan application failed");
-      setIncome("");
-      setMonthsToRepay("");
-      setPrincipal("");
+      setError(err.response?.data?.message || "❌ Loan application failed. Try again");
     }
   }
 
   return(
     <div>
-      <h2>Apply for a loan</h2>
+      <h2>Apply for a loan. </h2>
+      <p><b>5%</b> interest rate</p>
 
       <form onSubmit={handleSubmit}>
         <label>
           Monthly income(€): 
-          <input type="number" value={income} 
+          <input type="number" value={income} min="10"
           onChange={(e) => setIncome(e.target.value)} required />
         </label>
 
         <br/>
         <label>
           Loan Principal (€):
-          <input type="number" value={principal} min="3" 
+          <input type="number" value={principal} min="10" 
           onChange={(e) => setPrincipal(e.target.value)} required />
         </label>
 
         <br/>
         <label>
           Months To Repay: 
-          <input type="number" value={monthsToRepay} 
+          <input type="number" value={monthsToRepay} min="2"
           onChange={(e) => setMonthsToRepay(e.target.value)}
-          min="2" required/>
+           required/>
         </label>
 
         <button type="submit">Apply</button> 
